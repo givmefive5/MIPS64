@@ -15,6 +15,6 @@ public class MainFrame {
 	private static void buildFrame() {
 		frame = new JFrame("MIPS64 Processor");
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		frame = MenuBarHandler.addMenuBarToFrame(frame);
 	}
-
 }
