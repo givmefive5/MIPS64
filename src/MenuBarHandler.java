@@ -1,13 +1,22 @@
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SpringLayout;
 
 public class MenuBarHandler {
 	private static JMenuBar menuBar;
@@ -41,6 +50,43 @@ public class MenuBarHandler {
 						System.out.println("Something went wrong when loading file");
 						e1.printStackTrace();
 					}
+				}
+			}
+
+		});
+
+		textInputMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frame = new JFrame("Option Pane Text Area Example");
+
+				final SpringLayout layout = new SpringLayout();
+
+				final JPanel panel = new JPanel(layout);
+				panel.setPreferredSize(new Dimension(800, 800));
+
+				JLabel lblCode = new JLabel("Code:");
+				panel.add(lblCode);
+				JTextArea txtCode = new JTextArea();
+				txtCode.setBorder(BorderFactory.createLineBorder(Color.black));
+				txtCode.setLineWrap(true);
+				txtCode.setWrapStyleWord(true);
+				JScrollPane scrollPane = new JScrollPane(txtCode, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+						JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				scrollPane.setPreferredSize(new Dimension(800, 800));
+				panel.add(scrollPane);
+
+				layout.putConstraint(SpringLayout.WEST, lblCode, 0, SpringLayout.WEST, panel);
+				layout.putConstraint(SpringLayout.NORTH, scrollPane, 10, SpringLayout.SOUTH, lblCode);
+
+				int result = JOptionPane.showConfirmDialog(frame, panel, "Input MIPS64 text code",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+				if (result == JOptionPane.YES_OPTION) {
+					InputHandler.setInput(txtCode.getText());
+				} else {
+					System.out.println("Canceled");
 				}
 			}
 

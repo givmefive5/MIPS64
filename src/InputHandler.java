@@ -13,5 +13,6 @@ public class InputHandler {
 
 	public static void setInput(String text) {
 		input = text;
+		System.out.println(input);
 	}
 }
