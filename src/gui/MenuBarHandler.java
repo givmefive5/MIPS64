@@ -1,3 +1,4 @@
+package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
+
+import controller.InputHandler;
 
 public class MenuBarHandler {
 	private static JMenuBar menuBar;
@@ -86,7 +89,7 @@ public class MenuBarHandler {
 				if (result == JOptionPane.YES_OPTION) {
 					InputHandler.setInput(txtCode.getText());
 				} else {
-					System.out.println("Canceled");
+					System.out.println("Canceled JOptionPane for text code input.");
 				}
 			}
 

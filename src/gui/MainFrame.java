@@ -1,3 +1,4 @@
+package gui;
 import java.awt.Frame;
 
 import javax.swing.JFrame;
