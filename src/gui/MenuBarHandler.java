@@ -1,6 +1,8 @@
 package gui;
+
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -67,7 +69,8 @@ public class MenuBarHandler {
 				final SpringLayout layout = new SpringLayout();
 
 				final JPanel panel = new JPanel(layout);
-				panel.setPreferredSize(new Dimension(800, 800));
+				panel.setPreferredSize(
+						new Dimension(800, (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 200));
 
 				JLabel lblCode = new JLabel("Code:");
 				panel.add(lblCode);

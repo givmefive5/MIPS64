@@ -1,9 +1,10 @@
+package controller;
+
 import javax.swing.JFrame;
 
 import gui.MainFrame;
 
-public class Main {
-
+public class MainController {
 	public static void main(String[] args) {
 		JFrame frame = MainFrame.getInstance();
 		frame.setVisible(true);
