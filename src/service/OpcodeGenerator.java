@@ -90,15 +90,30 @@ public class OpcodeGenerator {
 			opcode += StringUtils.leftPad(Integer.toBinaryString(func), 6, "0");
 		} else if (command.equals("J")) {
 			opcode += StringUtils.leftPad(Integer.toBinaryString(2), 6, "0");
-			// TODO OFFSET
+			System.out.println(ins.getJumpLink());
+			int jumpLinkLineNumber = findLabel(instructions, ins.getJumpLink());
+			opcode += StringUtils.leftPad(Integer.toBinaryString(jumpLinkLineNumber), 26, "0");
 		} else if (command.equals("BEQ")) {
 			opcode += StringUtils.leftPad(Integer.toBinaryString(4), 6, "0");
 			opcode += getBinaryOfRegister(ins.getRs());
 			opcode += getBinaryOfRegister(ins.getRt());
-			// TODO OFFSET
+			int jumpLinkLineNumber = findLabel(instructions, ins.getJumpLink());
+			int relativeOffset = jumpLinkLineNumber - (lineNumber + 1);
+			System.out.println(jumpLinkLineNumber + " " + lineNumber);
+			opcode += StringUtils.leftPad(Integer.toBinaryString(relativeOffset), 16, "0");
 		}
 
 		return opcode;
+	}
+
+	private static int findLabel(List<Instruction> instructions, String jumpLink) {
+		for (int i = 0; i < instructions.size(); i++) {
+			Instruction ins = instructions.get(i);
+			System.out.println(ins.getLabel() + " " + jumpLink);
+			if (ins.getLabel() != null && ins.getLabel().equals(jumpLink))
+				return i;
+		}
+		return -1;
 	}
 
 	private static String getBinaryFromHex(String hex) {

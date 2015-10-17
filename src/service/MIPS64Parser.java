@@ -28,8 +28,8 @@ public class MIPS64Parser {
 				String command;
 				String[] registers;
 
-				if (firstArg.contains(":")) {
-					label = firstArg;
+				if (firstArg.charAt(firstArg.length() - 1) == ':') {
+					label = firstArg.substring(0, firstArg.length() - 1);
 					command = scanner.next();
 				} else if (Arrays.asList(instructionsHandled).contains(firstArg)) {
 					command = firstArg;

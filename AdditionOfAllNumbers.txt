@@ -1,10 +1,10 @@
-MUL.S F2, F3, F31
+BEQ r4, r1, loop
 init: DADDIU r1, r0, 20 ;qwewqdsadqr
 DADDU r2, r0, r0
 DADDU r3, r0, r0 
 DADDU r4, r0, r0 
 
-loop- LW r5, 2000(r2) 
+loop: LW r5, 2000(r2) 
 DADDU r3, r3, r5 
 DADDIU r2, r2, 8  
 DADDIU r4, r4, 1 
