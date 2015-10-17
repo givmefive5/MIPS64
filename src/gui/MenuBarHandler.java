@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
 
-import controller.InputHandler;
+import controller.MainController;
 
 public class MenuBarHandler {
 	private static JMenuBar menuBar;
@@ -50,7 +50,7 @@ public class MenuBarHandler {
 					File selectedFile = fileChooser.getSelectedFile();
 					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 					try {
-						InputHandler.setInput(selectedFile);
+						MainController.setInput(selectedFile);
 					} catch (IOException e1) {
 						System.out.println("Something went wrong when loading file");
 						e1.printStackTrace();
@@ -90,7 +90,7 @@ public class MenuBarHandler {
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 				if (result == JOptionPane.YES_OPTION) {
-					InputHandler.setInput(txtCode.getText());
+					MainController.setInput(txtCode.getText());
 				} else {
 					System.out.println("Canceled JOptionPane for text code input.");
 				}

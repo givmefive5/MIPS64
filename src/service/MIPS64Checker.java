@@ -7,6 +7,10 @@ import exceptions.InvalidFormatException;
 public class MIPS64Checker {
 
 	public static List<String> parse(String text) throws InvalidFormatException {
-		throw new InvalidFormatException("Parsing error, unknown format");
+		String[] lines = text.split("\n");
+		for (int i = 0; i < lines.length; i++) {
+			System.out.println(i + ". - " + lines[i]);
+		}
+		return null;
 	}
 }
