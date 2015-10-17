@@ -1,3 +1,5 @@
-/Main.class
-/MainFrame.class
+/controller/
+/exceptions/
+/gui/
+/service/
 /Model/

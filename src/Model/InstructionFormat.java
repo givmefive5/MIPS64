@@ -8,13 +8,13 @@ public class InstructionFormat {
 	
 	public static InstructionFormat getInstance(){
 		if(instance == null){
-			initializeMap();
+			initializeOpcodeMap();
 			instance =  new InstructionFormat();
 		}
 		return instance;
 	}
 	
-	private static void initializeMap(){
+	private static void initializeOpcodeMap(){
 		
 		//R-Type
 		insMap.put("DADDU", "000000");
