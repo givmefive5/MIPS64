@@ -1,18 +1,13 @@
-.data 
-values: .word 52,24,31,6,17,30,90,10,1,79,41,66,83,99,11,3,59,37,64,14
-result: .space 8
-.text
+MUL.S F2, F3, F31
+init: DADDIU r1, r0, 20 ;qwewqdsadqr
+DADDU r2, r0, r0
+DADDU r3, r0, r0 
+DADDU r4, r0, r0 
 
-init: DADDIU r1, r0, 20 ; size of array
-	DADDU r2, r0, r0  ; array pointer starts at 0
-	DADDU r3, r0, r0  ; sum result starts with 0
-	DADDU r4, r0, r0  ; array index
-	
-loop: LD r5, values(r2) ; get a value and store in r4
-	DADDU r3, r3, r5  ; add value to the sum result
-	DADDIU r2, r2, 8   ; increment pointer (8) because .word is 8bytes
-	DADDIU r4, r4, 1   ; increment counter
-	BNE r4, r1, loop
-	
-	SD r3, result(r0)
-	halt
+loop- LW r5, 2000(r2) 
+DADDU r3, r3, r5 
+DADDIU r2, r2, 8  
+DADDIU r4, r4, 1 
+BEQ r4, r1, loop
+
+SW r3, result(r0)

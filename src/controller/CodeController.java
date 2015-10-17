@@ -24,7 +24,6 @@ public class CodeController {
 			code[i][0] = hex;
 			code[i][1] = "0000000000000000";
 			i++;
-			System.out.println(i + " " + hex);
 		}
 
 	}

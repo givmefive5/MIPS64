@@ -40,7 +40,14 @@ public class MemoryPanel {
 	private static void buildTable() {
 		String[][] memory = MemoryController.getMemoryValues();
 		String[] columns = { "Address", "Representation" };
-		DefaultTableModel tableModel = new DefaultTableModel(memory, columns);
+		DefaultTableModel tableModel = new DefaultTableModel(memory, columns) {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				if (col == 1)
+					return true;
+				return false;
+			}
+		};
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		// table.setTableHeader(null);

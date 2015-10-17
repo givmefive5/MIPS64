@@ -3,13 +3,15 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 import javax.swing.JFrame;
 
-import exceptions.InvalidFormatException;
+import Model.Instruction;
 import gui.InputUIHandler;
 import gui.MainFrame;
-import service.MIPS64Checker;
+import service.MIPS64Parser;
+import service.OpcodeGenerator;
 
 public class MainController {
 
@@ -32,10 +34,28 @@ public class MainController {
 
 	private static void handleInput() {
 		try {
-			MIPS64Checker.parse(input);
-		} catch (InvalidFormatException e) {
+			List<Instruction> instructions = MIPS64Parser.parse(input);
+			System.out.println(instructions.size());
+			String s = OpcodeGenerator.getBinaryOpcode(instructions.get(0), 0, instructions);
+			System.out.println(s);
+		} catch (Exception e) {
+			e.printStackTrace();
 			InputUIHandler.showInputError();
 		}
 	}
+
+	// if (ins != null) {
+	// System.out.println("command: " + ins.getCommand());
+	// System.out.println("rd: " + ins.getRd());
+	// System.out.println("rs: " + ins.getRs());
+	// System.out.println("rt: " + ins.getRt());
+	// System.out.println("imm: " + ins.getImm());
+	// System.out.println("shift: " + ins.getShift());
+	// System.out.println("jumpLink: " + ins.getJumpLink());
+	// System.out.println("comment: " + ins.getComment());
+	// System.out.println("label: " + ins.getLabel());
+	// } else {
+	// System.out.println("INS IS NULL: instruction: " + s);
+	// }
 
 }

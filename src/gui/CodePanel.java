@@ -40,7 +40,12 @@ public class CodePanel {
 	private static void buildTable() {
 		String[][] code = CodeController.getCodeValues();
 		String[] columns = { "Address", "Representation", "Label", "Instruction" };
-		DefaultTableModel tableModel = new DefaultTableModel(code, columns);
+		DefaultTableModel tableModel = new DefaultTableModel(code, columns) {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		// table.setTableHeader(null);

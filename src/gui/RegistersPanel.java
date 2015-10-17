@@ -41,7 +41,14 @@ public class RegistersPanel {
 	private static void buildTable() {
 		String[][] registers = RegistersController.getRegisterValues();
 		String[] columns = { "R Names", "R Values", "F Names", "F Values" };
-		DefaultTableModel tableModel = new DefaultTableModel(registers, columns);
+		DefaultTableModel tableModel = new DefaultTableModel(registers, columns) {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				if (col == 1 || col == 3)
+					return true;
+				return false;
+			}
+		};
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		table.setTableHeader(null);
