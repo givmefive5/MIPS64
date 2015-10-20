@@ -25,8 +25,12 @@ public class MemoryController {
 			memory[i][0] = hex;
 			memory[i][1] = "0000000000000000";
 			i++;
-
 		}
+	}
 
+	public static void setValue(int row, int column, String value) {
+
+		memory[row][column] = value;
+		System.out.println("New Value : " + memory[row][column]);
 	}
 }

@@ -24,4 +24,11 @@ public class RegistersController {
 		registers[32][2] = "HI";
 		registers[32][3] = "0000000000000000";
 	}
+
+	public static void setValue(int row, int column, String value) {
+
+		registers[row][column] = value;
+		System.out.println("New Value : " + registers[row][column]);
+	}
+
 }

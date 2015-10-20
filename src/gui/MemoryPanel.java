@@ -9,11 +9,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import controller.MemoryController;
+import gui.tablemodels.MemoryTableModel;
 
 public class MemoryPanel {
 	private static JPanel panel;
@@ -40,14 +40,7 @@ public class MemoryPanel {
 	private static void buildTable() {
 		String[][] memory = MemoryController.getMemoryValues();
 		String[] columns = { "Address", "Representation" };
-		DefaultTableModel tableModel = new DefaultTableModel(memory, columns) {
-			@Override
-			public boolean isCellEditable(int row, int col) {
-				if (col == 1)
-					return true;
-				return false;
-			}
-		};
+		MemoryTableModel tableModel = new MemoryTableModel(memory, columns);
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		// table.setTableHeader(null);
@@ -61,14 +54,14 @@ public class MemoryPanel {
 
 	private static void addTableListener() {
 		TableModel tableModel = table.getModel();
+
 		tableModel.addTableModelListener(new TableModelListener() {
 
 			@Override
 			public void tableChanged(TableModelEvent tme) {
 				if (tme.getType() == TableModelEvent.UPDATE) {
-					System.out.println("");
-					System.out.println("Cell " + tme.getFirstRow() + ", " + tme.getColumn()
-							+ " changed. The new value: " + tableModel.getValueAt(tme.getFirstRow(), tme.getColumn()));
+					MemoryController.setValue(tme.getFirstRow(), tme.getColumn(),
+							(String) tableModel.getValueAt(tme.getFirstRow(), tme.getColumn()));
 				}
 			}
 		});

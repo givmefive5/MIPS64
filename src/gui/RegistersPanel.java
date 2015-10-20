@@ -9,11 +9,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import controller.RegistersController;
+import gui.tablemodels.RegisterTableModel;
 
 public class RegistersPanel {
 
@@ -41,14 +41,7 @@ public class RegistersPanel {
 	private static void buildTable() {
 		String[][] registers = RegistersController.getRegisterValues();
 		String[] columns = { "R Names", "R Values", "F Names", "F Values" };
-		DefaultTableModel tableModel = new DefaultTableModel(registers, columns) {
-			@Override
-			public boolean isCellEditable(int row, int col) {
-				if (col == 1 || col == 3)
-					return true;
-				return false;
-			}
-		};
+		RegisterTableModel tableModel = new RegisterTableModel(registers, columns);
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		table.setTableHeader(null);
@@ -69,9 +62,8 @@ public class RegistersPanel {
 			@Override
 			public void tableChanged(TableModelEvent tme) {
 				if (tme.getType() == TableModelEvent.UPDATE) {
-					System.out.println("");
-					System.out.println("Cell " + tme.getFirstRow() + ", " + tme.getColumn()
-							+ " changed. The new value: " + tableModel.getValueAt(tme.getFirstRow(), tme.getColumn()));
+					RegistersController.setValue(tme.getFirstRow(), tme.getColumn(),
+							(String) tableModel.getValueAt(tme.getFirstRow(), tme.getColumn()));
 				}
 			}
 		});
