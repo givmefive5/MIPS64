@@ -1,6 +1,5 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,16 +8,16 @@ import Model.Instruction;
 
 public class OpcodeGenerator {
 
-	public static String[] getBinaryOpcodes(List<Instruction> instructions) {
-		List<String> opcodes = new ArrayList<>();
+	public static List<Instruction> setBinaryOpcodes(List<Instruction> instructions) {
 		for (int i = 0; i < instructions.size(); i++) {
 			Instruction ins = instructions.get(i);
-			opcodes.add(getBinaryOpcode(ins, i, instructions));
+			String opcode = getBinaryOpcode(ins, i, instructions);
+			ins.setOpcode(opcode);
 		}
-		return opcodes.toArray(new String[opcodes.size()]);
+		return instructions;
 	}
 
-	public static String getBinaryOpcode(Instruction ins, int lineNumber, List<Instruction> instructions) {
+	private static String getBinaryOpcode(Instruction ins, int lineNumber, List<Instruction> instructions) {
 		String opcode = "";
 		String command = ins.getCommand();
 		if (command.equals("DADDU") || command.equals("OR") || command.equals("SLT") || command.equals("DMULT")) {

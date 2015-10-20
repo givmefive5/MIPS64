@@ -13,4 +13,9 @@ public class MIPSCodeParsingException extends Exception {
 		super("Errors found: ");
 		this.errors = errors;
 	}
+
+	public List<Error> getErrors() {
+		return errors;
+	}
+
 }

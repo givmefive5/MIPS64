@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import Model.Error;
 import Model.Instruction;
-import gui.InputUIHandler;
+import exceptions.MIPSCodeParsingException;
+import gui.InputErrorDialog;
 import gui.MainFrame;
 import service.MIPS64Parser;
 import service.OpcodeGenerator;
@@ -35,12 +37,13 @@ public class MainController {
 	private static void handleInput() {
 		try {
 			List<Instruction> instructions = MIPS64Parser.parse(input);
-			System.out.println(instructions.size());
-			String s = OpcodeGenerator.getBinaryOpcode(instructions.get(0), 0, instructions);
-			System.out.println(s);
-		} catch (Exception e) {
-			e.printStackTrace();
-			InputUIHandler.showInputError();
+			instructions = OpcodeGenerator.setBinaryOpcodes(instructions);
+			for (Instruction ins : instructions) {
+				System.out.println(ins.getLine() + " " + ins.getOpcode());
+			}
+		} catch (MIPSCodeParsingException e) {
+			List<Error> errors = e.getErrors();
+			new InputErrorDialog(errors);
 		}
 	}
 

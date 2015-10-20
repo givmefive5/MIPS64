@@ -2,24 +2,38 @@ package service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 import Model.Error;
 import Model.Instruction;
 import exceptions.InvalidFormatException;
+import exceptions.InvalidImmediateException;
 import exceptions.InvalidParameterException;
 import exceptions.InvalidRegisterException;
+import exceptions.LabelNotFoundException;
 import exceptions.MIPSCodeParsingException;
 import exceptions.UnrecognizedCommandException;
 
 public class MIPS64Parser {
 
+	// public static List<Instruction> parse2(String text) throws
+	// MIPSCodeParsingException {
+	// String[] instructionsHandled = { "DADDU", "DMULT", "OR", "SLT", "BEQ",
+	// "LW", "LWU", "SW", "DSLL", "ANDI",
+	// "DADDIU", "J", "L.S", "S.S", "ADD.S", "MUL.S" };
+	// List<Instruction> instructions = new ArrayList<>();
+	// }
+
+	@SuppressWarnings("resource")
 	public static List<Instruction> parse(String text) throws MIPSCodeParsingException {
 		String[] instructionsHandled = { "DADDU", "DMULT", "OR", "SLT", "BEQ", "LW", "LWU", "SW", "DSLL", "ANDI",
 				"DADDIU", "J", "L.S", "S.S", "ADD.S", "MUL.S" };
 		List<Instruction> instructions = new ArrayList<>();
 
+		text = text.replaceAll("(?m)^[ \t]*\r?\n", "");
 		String[] lines = text.split("\\r?\\n");
 
 		List<Error> errors = new ArrayList<>();
@@ -53,16 +67,36 @@ public class MIPS64Parser {
 
 				Instruction ins = null;
 				try {
-					ins = getInstruction(command, label, comment, registers);
+					if (registers.length > 3) {
+						throw new InvalidParameterException();
+					}
+					ins = getInstruction(i, s, command, label, comment, registers);
 					instructions.add(ins);
 				} catch (UnrecognizedCommandException | InvalidParameterException | InvalidFormatException e) {
-					System.out.println(e.getMessage());
 					errors.add(new Error(s, i, e.getMessage()));
 				}
 				scanner.close();
 			}
 		}
+
+		for (Instruction ins : instructions) {
+			try {
+				validateJumpLink(ins, instructions);
+				validateImmediate(ins);
+			} catch (LabelNotFoundException e) {
+				errors.add(new Error(e.getLine(), e.getLineNumber(), e.getMessage()));
+			} catch (InvalidImmediateException e) {
+				errors.add(new Error(e.getLine(), e.getLineNumber(), e.getMessage()));
+			}
+
+		}
 		if (errors.size() > 0) {
+			errors = sortErrorsByLineNumber(errors);
+
+			for (Error e : errors) {
+				System.out.println(e.getLineNumber() + " " + e.getLine() + " " + e.getErrorMessage());
+			}
+
 			throw new MIPSCodeParsingException(errors);
 		}
 
@@ -70,8 +104,48 @@ public class MIPS64Parser {
 
 	}
 
-	private static Instruction getInstruction(String command, String label, String comment, String[] registers)
-			throws UnrecognizedCommandException, InvalidParameterException, InvalidFormatException {
+	private static List<Error> sortErrorsByLineNumber(List<Error> errors) {
+		Collections.sort(errors, new Comparator<Error>() {
+			@Override
+			public int compare(Error o1, Error o2) {
+				if (o1.getLineNumber() == o2.getLineNumber())
+					return 0;
+				return o1.getLineNumber() < o2.getLineNumber() ? -1 : 1;
+			}
+		});
+		return errors;
+	}
+
+	private static void validateImmediate(Instruction ins) throws InvalidImmediateException {
+		String imm = ins.getImm();
+		try {
+			if (imm != null && imm.length() <= 4)
+				Integer.parseInt(imm, 16);
+			else if (imm != null)
+				throw new InvalidImmediateException(imm, ins.getLine(), ins.getLineNumber());
+		} catch (Exception e) {
+			throw new InvalidImmediateException(imm, ins.getLine(), ins.getLineNumber());
+		}
+	}
+
+	private static void validateJumpLink(Instruction ins, List<Instruction> instructions)
+			throws LabelNotFoundException {
+		if (ins.getJumpLink() != null) {
+			boolean isFound = false;
+			for (Instruction s : instructions) {
+				if (s.getLabel() != null && ins.getJumpLink().equals(s.getLabel())) {
+					isFound = true;
+					break;
+				}
+			}
+			if (isFound == false)
+				throw new LabelNotFoundException(ins.getJumpLink(), ins.getLine(), ins.getLineNumber());
+		}
+
+	}
+
+	private static Instruction getInstruction(int lineNumber, String line, String command, String label, String comment,
+			String[] registers) throws UnrecognizedCommandException, InvalidParameterException, InvalidFormatException {
 		String rd = null;
 		String rs = null;
 		String rt = null;
@@ -129,7 +203,8 @@ public class MIPS64Parser {
 			} else {
 				throw new UnrecognizedCommandException();
 			}
-			Instruction ins = new Instruction(command, rd, rs, rt, imm, shift, label, jumpLink, comment);
+			Instruction ins = new Instruction(lineNumber, line, command, rd, rs, rt, imm, shift, label, jumpLink,
+					comment);
 			return ins;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new InvalidParameterException();

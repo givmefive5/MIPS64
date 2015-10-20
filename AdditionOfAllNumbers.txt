@@ -1,13 +1,13 @@
 ADD.S f4, f31, f0
-init: DADDIU r1, r0, 20 ;qwewqdsadqr
-DADDU r2, r0 r0
-DADDU r3, r0, r0 
-DADDU r4, r0, r0 
+
+init: DADDIU r1, r0, FFFF ;qwewqdsadqr
+DADDU r2, r0, r1
+DADDU r3, r0, r1 
+DADDU r4, r0, r1 
 
 loop: LW r5, 2000(r2) 
 DADDU r3, r3, r5 
 DADDIU r2, r2, 8  
-DADDIU r4, r4, 1 
-BEQ r4, r33, loop
+DADDIU r4, r4, 1
 
-SW r3, result(r0)
+SW r3, 2121(r0)

@@ -2,23 +2,22 @@ package Model;
 
 public class Error {
 
-	String code;
+	String line;
 	int lineNumber;
 	String errorMessage;
 
-	public Error(String code, int lineNumber, String errorMessage) {
+	public Error(String line, int lineNumber, String errorMessage) {
 		super();
-		this.code = code;
-		this.lineNumber = lineNumber;
+		this.line = line;
 		this.errorMessage = errorMessage;
 	}
 
-	public String getCode() {
-		return code;
+	public String getLine() {
+		return line;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setLine(String line) {
+		this.line = line;
 	}
 
 	public int getLineNumber() {

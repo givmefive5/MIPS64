@@ -2,6 +2,8 @@ package Model;
 
 public class Instruction {
 
+	private int lineNumber;
+	private String line;
 	private String command;
 	private String rd;
 	private String rs;
@@ -11,10 +13,13 @@ public class Instruction {
 	private String label;
 	private String jumpLink;
 	private String comment;
+	private String opcode;
 
-	public Instruction(String command, String rd, String rs, String rt, String imm, String shift, String label,
-			String jumpLink, String comment) {
+	public Instruction(int lineNumber, String line, String command, String rd, String rs, String rt, String imm,
+			String shift, String label, String jumpLink, String comment) {
 		super();
+		this.lineNumber = lineNumber;
+		this.line = line;
 		this.command = command;
 		this.rd = rd;
 		this.rs = rs;
@@ -24,6 +29,30 @@ public class Instruction {
 		this.label = label;
 		this.jumpLink = jumpLink;
 		this.comment = comment;
+	}
+
+	public String getOpcode() {
+		return opcode;
+	}
+
+	public void setOpcode(String opcode) {
+		this.opcode = opcode;
+	}
+
+	public int getLineNumber() {
+		return lineNumber;
+	}
+
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
+	public String getLine() {
+		return line;
+	}
+
+	public void setLine(String line) {
+		this.line = line;
 	}
 
 	public String getCommand() {
