@@ -11,7 +11,7 @@ public class Runnable {
 	public static void main(String[] args) {
 		JFrame frame = MainFrame.getInstance();
 
-		frameController = new FrameController();
+		frameController = FrameController.getInstance();
 
 		frame.setVisible(true);
 

@@ -29,6 +29,8 @@ public class MenuBarHandler {
 	private static JMenuItem fileInputMenuItem;
 	private static JMenuItem textInputMenuItem;
 
+	private static FrameController frameController = FrameController.getInstance();
+
 	public static JFrame addMenuBarToFrame(JFrame frame) {
 		menuBar = new JMenuBar();
 		inputMenu = new JMenu("Input");
@@ -50,7 +52,7 @@ public class MenuBarHandler {
 					File selectedFile = fileChooser.getSelectedFile();
 					System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 					try {
-						FrameController.setInput(selectedFile);
+						frameController.setInput(selectedFile);
 					} catch (IOException e1) {
 						System.out.println("Something went wrong when loading file");
 						e1.printStackTrace();
@@ -90,7 +92,7 @@ public class MenuBarHandler {
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 				if (result == JOptionPane.YES_OPTION) {
-					FrameController.setInput(txtCode.getText());
+					frameController.setInput(txtCode.getText());
 				} else {
 					System.out.println("Canceled JOptionPane for text code input.");
 				}

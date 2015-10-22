@@ -8,12 +8,19 @@ import Model.Instruction;
 import gui.CodePanel;
 
 public class CodeController {
+	private static CodeController codeController;
 	private String[][] codes;
 	private CodePanel codePanel = CodePanel.getInstance();
 
-	public CodeController() {
+	private CodeController() {
 		initCode();
 		codePanel.initTable(codes);
+	}
+
+	public static CodeController getInstance() {
+		if (codeController == null)
+			codeController = new CodeController();
+		return codeController;
 	}
 
 	private void initCode() {
@@ -32,6 +39,8 @@ public class CodeController {
 	}
 
 	public void setCodeValues(List<Instruction> instructions) {
+		initCode();
+		codePanel.initTable(codes);
 		codePanel.setCodeValues(instructions);
 	}
 }

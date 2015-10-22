@@ -19,6 +19,9 @@ public class CodePanel {
 	private static JTable table;
 	private static CodeTableModel tableModel;
 
+	private CodePanel() {
+	}
+
 	public static CodePanel getInstance() {
 		if (codePanel == null) {
 			codePanel = new CodePanel();

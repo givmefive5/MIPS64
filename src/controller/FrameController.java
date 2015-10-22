@@ -14,24 +14,39 @@ import service.OpcodeGenerator;
 
 public class FrameController {
 
+	private static FrameController frameController;
 	private static String input;
-	public static CodeController codeController;
+	private static CodeController codeController;
+	private static MemoryController memoryController;
+	private static RegistersController registersController;
 
-	public FrameController() {
-		codeController = new CodeController();
+	private FrameController() {
 	}
 
-	public static void setInput(File f) throws IOException {
+	public static FrameController getInstance() {
+		if (frameController == null)
+			initFrameController();
+		return frameController;
+	}
+
+	private static void initFrameController() {
+		frameController = new FrameController();
+		codeController = CodeController.getInstance();
+		memoryController = MemoryController.getInstance();
+		registersController = RegistersController.getInstance();
+	}
+
+	public void setInput(File f) throws IOException {
 		input = new String(Files.readAllBytes(f.toPath()));
 		handleInput();
 	}
 
-	public static void setInput(String text) {
+	public void setInput(String text) {
 		input = text;
 		handleInput();
 	}
 
-	private static void handleInput() {
+	private void handleInput() {
 		try {
 			List<Instruction> instructions = MIPS64Parser.parse(input);
 			instructions = OpcodeGenerator.setBinaryOpcodes(instructions);

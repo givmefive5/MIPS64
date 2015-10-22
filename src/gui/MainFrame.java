@@ -25,8 +25,8 @@ public class MainFrame {
 
 		contentPane = new JPanel();
 		contentPane.setLayout(new GridLayout(2, 3));
-		contentPane.add(RegistersPanel.getInstance());
-		contentPane.add(MemoryPanel.getInstance());
+		contentPane.add(RegistersPanel.getInstance().getPanel());
+		contentPane.add(MemoryPanel.getInstance().getPanel());
 		contentPane.add(PipelinePanel.getInstance());
 		contentPane.add(InternalRegistersPanel.getInstance());
 		contentPane.add(OutputsPanel.getInstance());

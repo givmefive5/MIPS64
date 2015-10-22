@@ -1,19 +1,32 @@
 package controller;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+
 import org.apache.commons.lang3.StringUtils;
+
+import gui.MemoryPanel;
 
 public class MemoryController {
 
+	private static MemoryController memoryController;
 	private static String[][] memory;
+	private static MemoryPanel memoryPanel = MemoryPanel.getInstance();
 
-	public static String[][] getMemoryValues() {
-		if (memory == null) {
-			initMemory();
-		}
-		return memory;
+	private MemoryController() {
+		initMemory();
+		memoryPanel.initTable(memory);
+		addTableListener();
 	}
 
-	private static void initMemory() {
+	public static MemoryController getInstance() {
+		if (memoryController == null)
+			memoryController = new MemoryController();
+		return memoryController;
+	}
+
+	private void initMemory() {
 		memory = new String[2048][2];
 
 		int i = 0;
@@ -28,9 +41,25 @@ public class MemoryController {
 		}
 	}
 
+	private void addTableListener() {
+		TableModel tableModel = memoryPanel.getTable().getModel();
+
+		tableModel.addTableModelListener(new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent tme) {
+				if (tme.getType() == TableModelEvent.UPDATE) {
+					int row = tme.getFirstRow();
+					int col = tme.getColumn();
+					String value = (String) tableModel.getValueAt(tme.getFirstRow(), tme.getColumn());
+					memory[row][col] = value;
+					System.out.println("New Value : " + memory[row][col]);
+				}
+			}
+		});
+	}
+
 	public static void setValue(int row, int column, String value) {
 
-		memory[row][column] = value;
-		System.out.println("New Value : " + memory[row][column]);
 	}
 }
