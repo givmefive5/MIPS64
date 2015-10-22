@@ -49,7 +49,12 @@ public class MIPS64Parser {
 
 				if (firstArg.charAt(firstArg.length() - 1) == ':') {
 					label = firstArg.substring(0, firstArg.length() - 1);
-					command = scanner.next();
+					if (scanner.hasNext())
+						command = scanner.next();
+					else {
+						errors.add(new Error(s, i, "No instruction found!"));
+						continue;
+					}
 				} else if (Arrays.asList(instructionsHandled).contains(firstArg)) {
 					command = firstArg;
 				} else {

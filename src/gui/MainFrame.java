@@ -27,9 +27,9 @@ public class MainFrame {
 		contentPane.setLayout(new GridLayout(2, 3));
 		contentPane.add(RegistersPanel.getInstance().getPanel());
 		contentPane.add(MemoryPanel.getInstance().getPanel());
-		contentPane.add(PipelinePanel.getInstance());
-		contentPane.add(InternalRegistersPanel.getInstance());
-		contentPane.add(OutputsPanel.getInstance());
+		contentPane.add(PipelinePanel.getInstance().getPanel());
+		contentPane.add(InternalRegistersPanel.getInstance().getPanel());
+		contentPane.add(OutputsPanel.getInstance().getPanel());
 		contentPane.add(CodePanel.getInstance().getPanel());
 		frame.setContentPane(contentPane);
 	}

@@ -4,12 +4,18 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class InternalRegistersPanel {
+	private static InternalRegistersPanel internalRegPanel;
 	private static JPanel panel;
 
-	public static JPanel getInstance() {
-		if (panel == null) {
+	public static InternalRegistersPanel getInstance() {
+		if (internalRegPanel == null) {
+			internalRegPanel = new InternalRegistersPanel();
 			buildPanel();
 		}
+		return internalRegPanel;
+	}
+
+	public JPanel getPanel() {
 		return panel;
 	}
 

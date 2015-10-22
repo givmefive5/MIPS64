@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import Model.Error;
 import Model.Instruction;
 import exceptions.MIPSCodeParsingException;
 import gui.InputErrorDialog;
+import gui.MainFrame;
 import service.MIPS64Parser;
 import service.OpcodeGenerator;
 
@@ -57,6 +60,10 @@ public class FrameController {
 		} catch (MIPSCodeParsingException e) {
 			List<Error> errors = e.getErrors();
 			new InputErrorDialog(errors);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(MainFrame.getInstance(),
+					"Unknown Exception: Probably caused by unexpected file format.", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
