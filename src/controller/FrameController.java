@@ -5,23 +5,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import Model.Error;
 import Model.Instruction;
 import exceptions.MIPSCodeParsingException;
 import gui.InputErrorDialog;
-import gui.MainFrame;
 import service.MIPS64Parser;
 import service.OpcodeGenerator;
 
-public class MainController {
+public class FrameController {
 
 	private static String input;
+	public static CodeController codeController;
 
-	public static void main(String[] args) {
-		JFrame frame = MainFrame.getInstance();
-		frame.setVisible(true);
+	public FrameController() {
+		codeController = new CodeController();
 	}
 
 	public static void setInput(File f) throws IOException {
@@ -41,6 +38,7 @@ public class MainController {
 			for (Instruction ins : instructions) {
 				System.out.println(ins.getLine() + " " + ins.getOpcode());
 			}
+			codeController.setCodeValues(instructions);
 		} catch (MIPSCodeParsingException e) {
 			List<Error> errors = e.getErrors();
 			new InputErrorDialog(errors);

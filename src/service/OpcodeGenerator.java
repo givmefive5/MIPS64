@@ -1,5 +1,6 @@
 package service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,10 @@ public class OpcodeGenerator {
 			Instruction ins = instructions.get(i);
 			String opcode = getBinaryOpcode(ins, i, instructions);
 			ins.setOpcode(opcode);
+			BigInteger b = new BigInteger(opcode, 2);
+			String hexOpcode = b.toString(16).toUpperCase();
+			hexOpcode = StringUtils.leftPad(hexOpcode, 8, "0");
+			ins.setHexOpcode(hexOpcode);
 		}
 		return instructions;
 	}

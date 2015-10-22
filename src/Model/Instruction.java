@@ -14,6 +14,7 @@ public class Instruction {
 	private String jumpLink;
 	private String comment;
 	private String opcode;
+	private String hexOpcode;
 
 	public Instruction(int lineNumber, String line, String command, String rd, String rs, String rt, String imm,
 			String shift, String label, String jumpLink, String comment) {
@@ -37,6 +38,14 @@ public class Instruction {
 
 	public void setOpcode(String opcode) {
 		this.opcode = opcode;
+	}
+
+	public String getHexOpcode() {
+		return hexOpcode;
+	}
+
+	public void setHexOpcode(String hexOpcode) {
+		this.hexOpcode = hexOpcode;
 	}
 
 	public int getLineNumber() {

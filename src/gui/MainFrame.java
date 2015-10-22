@@ -30,7 +30,7 @@ public class MainFrame {
 		contentPane.add(PipelinePanel.getInstance());
 		contentPane.add(InternalRegistersPanel.getInstance());
 		contentPane.add(OutputsPanel.getInstance());
-		contentPane.add(CodePanel.getInstance());
+		contentPane.add(CodePanel.getInstance().getPanel());
 		frame.setContentPane(contentPane);
 	}
 }

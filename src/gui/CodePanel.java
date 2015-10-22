@@ -2,27 +2,32 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
-import controller.CodeController;
+import Model.Instruction;
+import gui.tablemodels.CodeTableModel;
 
 public class CodePanel {
+	private static CodePanel codePanel;
 	private static JPanel panel;
 	private static JTable table;
+	private static CodeTableModel tableModel;
 
-	public static JPanel getInstance() {
-		if (panel == null) {
+	public static CodePanel getInstance() {
+		if (codePanel == null) {
+			codePanel = new CodePanel();
 			buildPanel();
 		}
+		return codePanel;
+	}
+
+	public JPanel getPanel() {
 		return panel;
 	}
 
@@ -30,46 +35,33 @@ public class CodePanel {
 		panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(BorderFactory.createTitledBorder("Code"));
-		buildTable();
+	}
+
+	public void initTable(String[][] codes) {
+		String[] columns = { "Address", "Representation", "Label", "Instruction" };
+		tableModel = new CodeTableModel(codes, columns);
+		table = new JTable(tableModel);
+		table.setFont(new Font("Courier", Font.PLAIN, 12));
+		// table.setTableHeader(null);
+		// table.setShowGrid(false);
+		TableColumnModel tcm = table.getColumnModel();
+		tcm.getColumn(0).setPreferredWidth(10);
+		tcm.getColumn(1).setPreferredWidth(40);
+		tcm.getColumn(2).setPreferredWidth(160);
+		tcm.getColumn(3).setPreferredWidth(110);
+
 		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setSize(panel.getSize());
 		panel.add(scrollPane);
 	}
 
-	private static void buildTable() {
-		String[][] code = CodeController.getCodeValues();
-		String[] columns = { "Address", "Representation", "Label", "Instruction" };
-		DefaultTableModel tableModel = new DefaultTableModel(code, columns) {
-			@Override
-			public boolean isCellEditable(int row, int col) {
-				return false;
-			}
-		};
-		table = new JTable(tableModel);
-		table.setFont(new Font("Courier", Font.PLAIN, 12));
-		// table.setTableHeader(null);
-		// table.setShowGrid(false);
-		TableColumnModel tcm = table.getColumnModel();
-		tcm.getColumn(0).setPreferredWidth(20);
-		tcm.getColumn(1).setPreferredWidth(100);
-		tcm.getColumn(2).setPreferredWidth(100);
-		tcm.getColumn(3).setPreferredWidth(200);
-		addTableListener();
+	public void setCodeValues(List<Instruction> instructions) {
+		for (int i = 0; i < instructions.size(); i++) {
+			Instruction ins = instructions.get(i);
+			tableModel.setInstruction(ins, i);
+		}
+		table.repaint();
 	}
 
-	private static void addTableListener() {
-		TableModel tableModel = table.getModel();
-		tableModel.addTableModelListener(new TableModelListener() {
-
-			@Override
-			public void tableChanged(TableModelEvent tme) {
-				if (tme.getType() == TableModelEvent.UPDATE) {
-					System.out.println("");
-					System.out.println("Cell " + tme.getFirstRow() + ", " + tme.getColumn()
-							+ " changed. The new value: " + tableModel.getValueAt(tme.getFirstRow(), tme.getColumn()));
-				}
-			}
-		});
-	}
 }
