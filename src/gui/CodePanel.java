@@ -42,10 +42,10 @@ public class CodePanel {
 
 	public void initTable(String[][] codes) {
 		String[] columns = { "Address", "Representation", "Label", "Instruction" };
-		tableModel = new CodeTableModel(codes, columns);
+		tableModel = new CodeTableModel(codes);
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
-		// table.setTableHeader(null);
+		table.setTableHeader(null);
 		// table.setShowGrid(false);
 		TableColumnModel tcm = table.getColumnModel();
 		tcm.getColumn(0).setPreferredWidth(10);

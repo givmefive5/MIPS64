@@ -43,10 +43,10 @@ public class MemoryPanel {
 
 	public void initTable(String[][] memory) {
 		String[] columns = { "Address", "Representation" };
-		MemoryTableModel tableModel = new MemoryTableModel(memory, columns);
+		MemoryTableModel tableModel = new MemoryTableModel(memory);
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
-		// table.setTableHeader(null);
+		table.setTableHeader(null);
 		// table.setShowGrid(false);
 		TableColumnModel tcm = table.getColumnModel();
 		tcm.getColumn(0).setPreferredWidth(40);

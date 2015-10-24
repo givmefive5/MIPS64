@@ -13,7 +13,7 @@ public class MemoryTableModel extends AbstractTableModel {
 
 	String[][] table;
 
-	public MemoryTableModel(String[][] memory, String[] columns) {
+	public MemoryTableModel(String[][] memory) {
 		super();
 		table = memory;
 	}

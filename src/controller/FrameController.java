@@ -19,6 +19,7 @@ public class FrameController {
 
 	private static FrameController frameController;
 	private static String input;
+	private static MenuBarController menuBarController;
 	private static CodeController codeController;
 	private static MemoryController memoryController;
 	private static RegistersController registersController;
@@ -34,6 +35,7 @@ public class FrameController {
 
 	private static void initFrameController() {
 		frameController = new FrameController();
+		menuBarController = MenuBarController.getInstance();
 		codeController = CodeController.getInstance();
 		memoryController = MemoryController.getInstance();
 		registersController = RegistersController.getInstance();
@@ -61,6 +63,7 @@ public class FrameController {
 			List<Error> errors = e.getErrors();
 			new InputErrorDialog(errors);
 		} catch (Exception e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(MainFrame.getInstance(),
 					"Unknown Exception: Probably caused by unexpected file format.", "Error",
 					JOptionPane.ERROR_MESSAGE);

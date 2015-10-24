@@ -55,7 +55,7 @@ public class MIPS64Parser {
 						errors.add(new Error(s, i, "No instruction found!"));
 						continue;
 					}
-				} else if (Arrays.asList(instructionsHandled).contains(firstArg)) {
+				} else if (Arrays.asList(instructionsHandled).contains(firstArg.toUpperCase())) {
 					command = firstArg;
 				} else {
 					errors.add(new Error(s, i, "Invalid Label"));
@@ -77,7 +77,8 @@ public class MIPS64Parser {
 					}
 					ins = getInstruction(i, s, command, label, comment, registers);
 					instructions.add(ins);
-				} catch (UnrecognizedCommandException | InvalidParameterException | InvalidFormatException e) {
+				} catch (UnrecognizedCommandException | InvalidParameterException | InvalidFormatException
+						| InvalidImmediateException e) {
 					errors.add(new Error(s, i, e.getMessage()));
 				}
 				scanner.close();
@@ -150,13 +151,16 @@ public class MIPS64Parser {
 	}
 
 	private static Instruction getInstruction(int lineNumber, String line, String command, String label, String comment,
-			String[] registers) throws UnrecognizedCommandException, InvalidParameterException, InvalidFormatException {
+			String[] registers) throws UnrecognizedCommandException, InvalidParameterException, InvalidFormatException,
+					InvalidImmediateException {
 		String rd = null;
 		String rs = null;
 		String rt = null;
 		String imm = null;
 		String shift = null;
 		String jumpLink = null;
+
+		command = command.toUpperCase();
 		try {
 			if (command.equals("DADDU") || command.equals("OR") || command.equals("SLT") || command.equals("ADD.S")
 					|| command.equals("MUL.S")) {
@@ -183,25 +187,31 @@ public class MIPS64Parser {
 				rs = registers[1].substring(registers[1].indexOf("(") + 1, registers[1].indexOf(")"));
 				if (command.equals("LW") || command.equals("LWU"))
 					areCorrectRegisterType('r', rd, rs, null);
-				else
-					areCorrectRegisterType('f', rd, rs, null);
+				else if (command.equals("L.S"))
+					areCorrectRegisterType('f', 'r', rd, rs, null);
 			} else if (command.equals("SW") || command.equals("S.S")) {
 				rt = registers[0];
 				imm = registers[1].substring(0, registers[1].indexOf("("));
 				rs = registers[1].substring(registers[1].indexOf("(") + 1, registers[1].indexOf(")"));
 				if (command.equals("SW"))
 					areCorrectRegisterType('r', null, rs, rt);
-				else
-					areCorrectRegisterType('f', null, rs, rt);
+				else if (command.equals("S.S"))
+					areCorrectRegisterType('f', 'r', null, rs, rt);
 			} else if (command.equals("DSLL")) {
 				rd = registers[0];
 				rs = registers[1];
-				shift = registers[2];
+				if (registers[2].startsWith("#"))
+					shift = registers[2].substring(1);
+				else
+					throw new InvalidImmediateException(shift, line, lineNumber);
 				areCorrectRegisterType('r', rd, rs, null);
 			} else if (command.equals("DADDIU") || command.equals("ANDI")) {
 				rd = registers[0];
 				rs = registers[1];
-				imm = registers[2];
+				if (registers[2].startsWith("#"))
+					imm = registers[2].substring(1);
+				else
+					throw new InvalidImmediateException(imm, line, lineNumber);
 				areCorrectRegisterType('r', rd, rs, null);
 			} else if (command.equals("J")) {
 				jumpLink = registers[0];
@@ -211,12 +221,39 @@ public class MIPS64Parser {
 			Instruction ins = new Instruction(lineNumber, line, command, rd, rs, rt, imm, shift, label, jumpLink,
 					comment);
 			return ins;
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException e) {
 			throw new InvalidParameterException();
 		} catch (InvalidRegisterException e) {
 			String message = e.getMessage() + ": " + Arrays.toString(e.getInvalidRegisters());
 			throw new InvalidFormatException(message);
 		}
+	}
+
+	private static boolean areCorrectRegisterType(char expectedType1, char expectedType2, String rd, String rs,
+			String rt) {
+		boolean areCorrect = true;
+		try {
+			if (!(rs.length() >= 2 && rs.length() <= 3 && rs.toLowerCase().charAt(0) == expectedType2
+					&& Integer.parseInt(rs.substring(1)) >= 0 && Integer.parseInt(rs.substring(1)) < 32)) {
+				areCorrect = false;
+			}
+			if (rd != null) {
+				if (!(rd.length() >= 2 && rd.length() <= 3 && rd.toLowerCase().charAt(0) == expectedType1
+						&& Integer.parseInt(rd.substring(1)) >= 0 && Integer.parseInt(rd.substring(1)) < 32)) {
+					areCorrect = false;
+				}
+			} else {// rt
+				if (!(rt.length() >= 2 && rt.length() <= 3 && rt.toLowerCase().charAt(0) == expectedType1
+						&& Integer.parseInt(rt.substring(1)) >= 0 && Integer.parseInt(rt.substring(1)) < 32)) {
+					areCorrect = false;
+				}
+			}
+
+		} catch (Exception e) {
+			areCorrect = false;
+		}
+
+		return areCorrect;
 	}
 
 	// Checks if all registers are all Rs or all Fs.

@@ -45,7 +45,7 @@ public class RegistersPanel {
 
 	public void initTable(String[][] registers) {
 		String[] columns = { "R Names", "R Values", "F Names", "F Values" };
-		RegisterTableModel tableModel = new RegisterTableModel(registers, columns);
+		RegisterTableModel tableModel = new RegisterTableModel(registers);
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		table.setTableHeader(null);

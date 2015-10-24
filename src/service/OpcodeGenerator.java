@@ -14,6 +14,7 @@ public class OpcodeGenerator {
 			Instruction ins = instructions.get(i);
 			String opcode = getBinaryOpcode(ins, i, instructions);
 			ins.setOpcode(opcode);
+			System.out.println(ins.getCommand());
 			BigInteger b = new BigInteger(opcode, 2);
 			String hexOpcode = b.toString(16).toUpperCase();
 			hexOpcode = StringUtils.leftPad(hexOpcode, 8, "0");
@@ -92,6 +93,14 @@ public class OpcodeGenerator {
 			else if (command.equals("MUL.S"))
 				func = 2;
 			opcode += StringUtils.leftPad(Integer.toBinaryString(func), 6, "0");
+		} else if (command.equals("DSLL")) {
+			opcode += StringUtils.leftPad("", 6, "0");
+			opcode += StringUtils.leftPad("", 5, "0");
+			opcode += getBinaryOfRegister(ins.getRs());
+			opcode += getBinaryOfRegister(ins.getRd());
+			opcode += StringUtils.leftPad(getBinaryFromHex(ins.getShift()), 5, "0");
+			int opcodeVal = 56;
+			opcode += StringUtils.leftPad(Integer.toBinaryString(opcodeVal), 6, "0");
 		} else if (command.equals("J")) {
 			opcode += StringUtils.leftPad(Integer.toBinaryString(2), 6, "0");
 			int jumpLinkLineNumber = findLabel(instructions, ins.getJumpLink());
@@ -126,5 +135,4 @@ public class OpcodeGenerator {
 		String temp = Integer.toBinaryString(Integer.parseInt(s));
 		return StringUtils.leftPad(temp, 5, "0");
 	}
-
 }

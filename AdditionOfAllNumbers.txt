@@ -1,10 +1,10 @@
 ADD.S f4, f31, f0
-
+SW r1, 1000(r2)
 init: DADDIU r1, r0, FFFF ;qwewqdsadqr
 DADDU r2, r0, r1
 DADDU r3, r0, r1 
-DADDU r4, r0, r1 
-
+DMULT r5, r1, r4
+BEQ r1, r0, loop	
 loop: LW r5, 2000(r2) 
 DADDU r3, r3, r5 
 DADDIU r2, r2, 8  

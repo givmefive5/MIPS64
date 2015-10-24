@@ -13,7 +13,7 @@ public class RegisterTableModel extends AbstractTableModel {
 
 	String[][] table;
 
-	public RegisterTableModel(String[][] registers, String[] columns) {
+	public RegisterTableModel(String[][] registers) {
 		super();
 		table = registers;
 	}

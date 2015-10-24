@@ -7,7 +7,7 @@ import Model.Instruction;
 public class CodeTableModel extends AbstractTableModel {
 	String[][] table;
 
-	public CodeTableModel(String[][] memory, String[] columns) {
+	public CodeTableModel(String[][] memory) {
 		super();
 		table = memory;
 	}
