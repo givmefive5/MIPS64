@@ -1,15 +1,15 @@
-DADDU  R1, R1, R31
-dmult r1, r2 ;to multiply
+DADU  R1, R1, R31
+dmult r1, r32 ;to multiply
 or r1, r2, r4
 slt r4, r5, r6
 BEQ R1, R2, Label1
 LW R1, 1000(R2)
-lwu r1, 1000(r3)
+lwu r1, 10300(r3)
 sw r1, 1000(r4)
 dsll r2, r1, #0002
 andi r1, r3, #0001
 daddiu r1, r2, #0001
-j Label1
+j Label2
 l.s f1, 1000(r2)
 s.s f2, 1000(r2)
 add.s f1, f2, f3

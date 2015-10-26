@@ -40,7 +40,7 @@ public class CodeController {
 
 	public void setCodeValues(List<Instruction> instructions) {
 		initCode();
-		codePanel.initTable(codes);
+		codePanel.resetCodeValues(codes);
 		codePanel.setCodeValues(instructions);
 	}
 }

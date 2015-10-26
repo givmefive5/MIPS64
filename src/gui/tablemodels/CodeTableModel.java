@@ -38,6 +38,11 @@ public class CodeTableModel extends AbstractTableModel {
 		this.fireTableCellUpdated(row, col);
 	}
 
+	public void resetValues(String[][] table){
+		this.table = table;
+		this.fireTableDataChanged();
+	}
+	
 	public void setInstruction(Instruction ins, int row) {
 		table[row][1] = ins.getHexOpcode();
 		String[] split = ins.getLine().split(";");

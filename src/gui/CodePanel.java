@@ -59,6 +59,10 @@ public class CodePanel {
 		panel.add(scrollPane);
 	}
 
+	public void resetCodeValues(String[][] blankCode){
+		tableModel.resetValues(blankCode);
+	}
+	
 	public void setCodeValues(List<Instruction> instructions) {
 		for (int i = 0; i < instructions.size(); i++) {
 			Instruction ins = instructions.get(i);
