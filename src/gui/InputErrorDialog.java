@@ -15,8 +15,8 @@ import Model.Error;
 
 public class InputErrorDialog extends JDialog {
 
-	private static JFrame frame = MainFrame.getInstance();
 	private static JTable table;
+	private static JFrame frame = MainFrame.getInstance();
 
 	public InputErrorDialog(List<Error> errors) {
 		super(frame, "Errors found!");
@@ -29,8 +29,10 @@ public class InputErrorDialog extends JDialog {
 		c.setLayout(new FlowLayout());
 		scrollPane.setSize(getContentPane().getSize());
 		c.add(scrollPane);
-		this.setLocationRelativeTo(null);
+
+		this.setLocationRelativeTo(frame);
 		this.pack();
+		this.setModal(true);
 		this.setVisible(true);
 	}
 

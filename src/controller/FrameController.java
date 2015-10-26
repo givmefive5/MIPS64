@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import Model.Error;
 import Model.Instruction;
 import exceptions.MIPSCodeParsingException;
+import gui.ConsoleInputBox;
 import gui.InputErrorDialog;
 import gui.MainFrame;
 import service.MIPS64Parser;
@@ -43,15 +44,15 @@ public class FrameController {
 
 	public void setInput(File f) throws IOException {
 		input = new String(Files.readAllBytes(f.toPath()));
-		handleInput();
+		handleInput("FILE");
 	}
 
 	public void setInput(String text) {
 		input = text;
-		handleInput();
+		handleInput("TEXT");
 	}
 
-	private void handleInput() {
+	private void handleInput(String inputType) {
 		try {
 			List<Instruction> instructions = MIPS64Parser.parse(input);
 			instructions = OpcodeGenerator.setBinaryOpcodes(instructions);
@@ -62,11 +63,21 @@ public class FrameController {
 		} catch (MIPSCodeParsingException e) {
 			List<Error> errors = e.getErrors();
 			new InputErrorDialog(errors);
+
+			if (inputType.equals("TEXT")) {
+				ConsoleInputBox inputBox = new ConsoleInputBox();
+				inputBox.showInputBox(input);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(MainFrame.getInstance(),
 					"Unknown Exception: Probably caused by unexpected file format.", "Error",
 					JOptionPane.ERROR_MESSAGE);
+
+			if (inputType.equals("TEXT")) {
+				ConsoleInputBox inputBox = new ConsoleInputBox();
+				inputBox.showInputBox(input);
+			}
 		}
 	}
 

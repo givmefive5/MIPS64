@@ -18,9 +18,13 @@ import controller.FrameController;
 public class ConsoleInputBox {
 
 	FrameController frameController = FrameController.getInstance();
+	JFrame frame;
 
-	public void showInputBox() {
-		JFrame frame = new JFrame("Input Code");
+	public ConsoleInputBox() {
+		frame = new JFrame("Input Code");
+	}
+
+	public void showInputBox(String text) {
 
 		final SpringLayout layout = new SpringLayout();
 
@@ -30,6 +34,7 @@ public class ConsoleInputBox {
 		JLabel lblCode = new JLabel("Code:");
 		panel.add(lblCode);
 		JTextArea txtCode = new JTextArea();
+		txtCode.setText(text);
 		txtCode.setBorder(BorderFactory.createLineBorder(Color.black));
 		txtCode.setLineWrap(true);
 		txtCode.setWrapStyleWord(true);
@@ -50,4 +55,5 @@ public class ConsoleInputBox {
 			System.out.println("Canceled JOptionPane for text code input.");
 		}
 	}
+
 }

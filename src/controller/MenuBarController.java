@@ -63,7 +63,7 @@ public class MenuBarController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ConsoleInputBox inputBox = new ConsoleInputBox();
-				inputBox.showInputBox();
+				inputBox.showInputBox("");
 			}
 
 		});

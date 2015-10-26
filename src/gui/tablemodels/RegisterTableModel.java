@@ -43,17 +43,14 @@ public class RegisterTableModel extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		String val = (String) value;
-		try {
-			if (val.length() <= 16) {
-				val = StringUtils.leftPad(val, 16, "0");
-
-				new BigInteger(val, 16);
-				table[row][col] = val;
-				this.fireTableCellUpdated(row, col);
-			} else if (val.length() > 16)
-				throw new Exception();
-		} catch (Exception e) {
+		if (row == 0)
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Registers R0 and F0 can not be edited.");
+		else if (val.length() <= 16) {
+			val = StringUtils.leftPad(val, 16, "0");
+			new BigInteger(val, 16);
+			table[row][col] = val;
+			this.fireTableCellUpdated(row, col);
+		} else if (val.length() > 16)
 			JOptionPane.showMessageDialog(MainFrame.getInstance(), val + " is an invalid register value!");
-		}
 	}
 }
