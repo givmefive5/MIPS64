@@ -27,12 +27,12 @@ public class MemoryController {
 	}
 
 	private void initMemory() {
-		memory = new String[2048][2];
+		memory = new String[1024][2];
 
 		int i = 0;
 		String hex = "";
 		while (!hex.equals("3FF8")) {
-			int mem = i * 8;
+			int mem = (i + 1024) * 8;
 			hex = Integer.toHexString(mem).toUpperCase();
 			hex = StringUtils.leftPad(hex, 4, "0");
 			memory[i][0] = hex;

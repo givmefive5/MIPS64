@@ -31,7 +31,7 @@ public class RegistersController {
 			registers[i][0] = "R" + i;
 			registers[i][1] = "0000000000000000";
 			registers[i][2] = "F" + i;
-			registers[i][3] = "0000000000000000";
+			registers[i][3] = "0.0";
 		}
 		registers[32][0] = "LO";
 		registers[32][1] = "0000000000000000";
