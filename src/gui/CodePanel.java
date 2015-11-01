@@ -38,11 +38,12 @@ public class CodePanel {
 		panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(BorderFactory.createTitledBorder("Code"));
+		initTable();
 	}
 
-	public void initTable(String[][] codes) {
+	public static void initTable() {
 		String[] columns = { "Address", "Representation", "Label", "Instruction" };
-		tableModel = new CodeTableModel(codes);
+		tableModel = new CodeTableModel();
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		table.setTableHeader(null);
@@ -59,10 +60,10 @@ public class CodePanel {
 		panel.add(scrollPane);
 	}
 
-	public void resetCodeValues(String[][] blankCode){
-		tableModel.resetValues(blankCode);
+	public void resetCodeValues() {
+		tableModel.resetValues();
 	}
-	
+
 	public void setCodeValues(List<Instruction> instructions) {
 		for (int i = 0; i < instructions.size(); i++) {
 			Instruction ins = instructions.get(i);

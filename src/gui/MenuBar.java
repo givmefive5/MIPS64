@@ -10,6 +10,9 @@ public class MenuBar {
 	private static JMenu inputMenu;
 	private static JMenuItem fileInputMenuItem;
 	private static JMenuItem textInputMenuItem;
+	private static JMenu runMenu;
+	private static JMenuItem runSingleCycleMenuItem;
+	private static JMenuItem runFullCycleMenuItem;
 
 	private MenuBar() {
 	}
@@ -32,6 +35,15 @@ public class MenuBar {
 		inputMenu.add(textInputMenuItem);
 
 		jMenuBar.add(inputMenu);
+
+		runMenu = new JMenu("Execute");
+		runSingleCycleMenuItem = new JMenuItem("Single Cycle");
+		runFullCycleMenuItem = new JMenuItem("Full Execution");
+		runMenu.add(runSingleCycleMenuItem);
+		runMenu.add(runFullCycleMenuItem);
+
+		runMenu.setVisible(false);
+		jMenuBar.add(runMenu);
 	}
 
 	public JMenuBar getjMenuBar() {
@@ -48,5 +60,21 @@ public class MenuBar {
 
 	public JMenuItem getTextInputMenuItem() {
 		return textInputMenuItem;
+	}
+
+	public JMenu getRunMenu() {
+		return runMenu;
+	}
+
+	public JMenuItem getRunSingleCycleMenuItem() {
+		return runSingleCycleMenuItem;
+	}
+
+	public JMenuItem getRunFullCycleMenuItem() {
+		return runFullCycleMenuItem;
+	}
+
+	public void setRunMenuVisible(boolean flag) {
+		runMenu.setVisible(flag);
 	}
 }

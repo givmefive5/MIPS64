@@ -15,7 +15,8 @@ public class RegistersPanel {
 
 	private static RegistersPanel registersPanel;
 	private static JPanel panel;
-	private JTable table;
+	private static JTable table;
+	private static RegisterTableModel tableModel;
 
 	private RegistersPanel() {
 	}
@@ -41,11 +42,12 @@ public class RegistersPanel {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(BorderFactory.createTitledBorder("Registers"));
 
+		initTable();
+
 	}
 
-	public void initTable(String[][] registers) {
-		String[] columns = { "R Names", "R Values", "F Names", "F Values" };
-		RegisterTableModel tableModel = new RegisterTableModel(registers);
+	public static void initTable() {
+		tableModel = new RegisterTableModel();
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		table.setTableHeader(null);
@@ -60,6 +62,10 @@ public class RegistersPanel {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setSize(panel.getSize());
 		panel.add(scrollPane);
+	}
+
+	public RegisterTableModel getTableModel() {
+		return tableModel;
 	}
 
 }

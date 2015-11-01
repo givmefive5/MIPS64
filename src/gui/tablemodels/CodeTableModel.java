@@ -2,29 +2,46 @@ package gui.tablemodels;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.commons.lang3.StringUtils;
+
 import Model.Instruction;
 
 public class CodeTableModel extends AbstractTableModel {
-	String[][] table;
+	String[][] codes;
 
-	public CodeTableModel(String[][] memory) {
+	public CodeTableModel() {
 		super();
-		table = memory;
+		initCode();
+	}
+
+	private void initCode() {
+		codes = new String[2048][4];
+
+		int i = 0;
+		String hex = "";
+		while (!hex.equals("1FFC")) {
+			int mem = i * 4;
+			hex = Integer.toHexString(mem).toUpperCase();
+			hex = StringUtils.leftPad(hex, 4, "0");
+			codes[i][0] = hex;
+			codes[i][1] = "00000000";
+			i++;
+		}
 	}
 
 	@Override
 	public int getRowCount() {
-		return table.length;
+		return codes.length;
 	}
 
 	@Override
 	public int getColumnCount() {
-		return table[0].length;
+		return codes[0].length;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return table[rowIndex][columnIndex];
+		return codes[rowIndex][columnIndex];
 	}
 
 	@Override
@@ -34,19 +51,19 @@ public class CodeTableModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		table[row][col] = (String) value;
+		codes[row][col] = (String) value;
 		this.fireTableCellUpdated(row, col);
 	}
 
-	public void resetValues(String[][] table){
-		this.table = table;
+	public void resetValues() {
+		initCode();
 		this.fireTableDataChanged();
 	}
-	
+
 	public void setInstruction(Instruction ins, int row) {
-		table[row][1] = ins.getHexOpcode();
+		codes[row][1] = ins.getHexOpcode();
 		String[] split = ins.getLine().split(";");
-		table[row][2] = split[0];
-		table[row][3] = ins.getComment();
+		codes[row][2] = split[0];
+		codes[row][3] = ins.getComment();
 	}
 }

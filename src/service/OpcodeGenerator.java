@@ -14,7 +14,6 @@ public class OpcodeGenerator {
 			Instruction ins = instructions.get(i);
 			String opcode = getBinaryOpcode(ins, i, instructions);
 			ins.setOpcode(opcode);
-			System.out.println(ins.getCommand());
 			BigInteger b = new BigInteger(opcode, 2);
 			String hexOpcode = b.toString(16).toUpperCase();
 			hexOpcode = StringUtils.leftPad(hexOpcode, 8, "0");

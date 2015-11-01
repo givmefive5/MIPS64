@@ -39,11 +39,12 @@ public class MemoryPanel {
 		panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(BorderFactory.createTitledBorder("Memory"));
+
+		initTable();
 	}
 
-	public void initTable(String[][] memory) {
-		String[] columns = { "Address", "Representation" };
-		MemoryTableModel tableModel = new MemoryTableModel(memory);
+	public static void initTable() {
+		MemoryTableModel tableModel = new MemoryTableModel();
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		table.setTableHeader(null);

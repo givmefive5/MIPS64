@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import Model.Error;
 import Model.Instruction;
 import exceptions.MIPSCodeParsingException;
+import exceptions.NoInputFoundException;
 import gui.ConsoleInputBox;
 import gui.InputErrorDialog;
 import gui.MainFrame;
@@ -24,6 +25,7 @@ public class FrameController {
 	private static CodeController codeController;
 	private static MemoryController memoryController;
 	private static RegistersController registersController;
+	private static PipelineMapController pipelineMapController;
 
 	private FrameController() {
 	}
@@ -40,6 +42,7 @@ public class FrameController {
 		codeController = CodeController.getInstance();
 		memoryController = MemoryController.getInstance();
 		registersController = RegistersController.getInstance();
+		pipelineMapController = PipelineMapController.getInstance();
 	}
 
 	public void setInput(File f) throws IOException {
@@ -55,14 +58,27 @@ public class FrameController {
 	private void handleInput(String inputType) {
 		try {
 			List<Instruction> instructions = MIPS64Parser.parse(input);
-			instructions = OpcodeGenerator.setBinaryOpcodes(instructions);
-			for (Instruction ins : instructions) {
-				System.out.println(ins.getLine() + " " + ins.getOpcode());
+			if (instructions.size() >= 1) {
+				instructions = OpcodeGenerator.setBinaryOpcodes(instructions);
+				codeController.setCodeValues(instructions);
+				menuBarController.setExecuteMenuVisible(true);
+				pipelineMapController.setCodeValues(instructions);
+			} else {
+				throw new NoInputFoundException("No lines found in new input");
 			}
-			codeController.setCodeValues(instructions);
+
 		} catch (MIPSCodeParsingException e) {
 			List<Error> errors = e.getErrors();
 			new InputErrorDialog(errors);
+
+			if (inputType.equals("TEXT")) {
+				ConsoleInputBox inputBox = new ConsoleInputBox();
+				inputBox.showInputBox(input);
+			}
+		} catch (NoInputFoundException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Exception: No input found in inputted text.",
+					"Error", JOptionPane.ERROR_MESSAGE);
 
 			if (inputType.equals("TEXT")) {
 				ConsoleInputBox inputBox = new ConsoleInputBox();

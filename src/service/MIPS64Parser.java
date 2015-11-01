@@ -98,11 +98,6 @@ public class MIPS64Parser {
 		}
 		if (errors.size() > 0) {
 			errors = sortErrorsByLineNumber(errors);
-
-			for (Error e : errors) {
-				System.out.println(e.getLineNumber() + " " + e.getLine() + " " + e.getErrorMessage());
-			}
-
 			throw new MIPSCodeParsingException(errors);
 		}
 

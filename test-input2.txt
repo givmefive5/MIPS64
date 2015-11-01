@@ -1,0 +1,28 @@
+DADDU  R1, R1, R31
+dmult r1, r2
+Label2: DADDIU R2, R2, #100A
+or r1, r2, r4
+slt r4, r5, r6
+BEQ R1, R2, Label1
+BEQ R1, R2, Label2
+LW R1, 1000(R2)
+lwu r1, 1000(r3)
+sw r1, 1000(r4)
+dsll r2, r1, #0002
+andi r1, r3, #0001
+andi r1, r3, #000A
+andi r1, r3, #00B1
+andi r1, r3, #00BA
+daddiu r1, r2, #0001
+daddiu r1, r2, #000A
+daddiu r1, r2, #00B1
+daddiu r1, r2, #00BA
+j Label1
+j Label2
+l.s f1, 1000(r2)
+s.s f2, 1000(r2)
+add.s f1, f2, f3
+mul.s f1, f2, f3
+Label1: DADDIU R2, R2, #100A
+	DMULT R1, R2
+s.s f1, 1000(r1)

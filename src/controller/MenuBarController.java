@@ -17,15 +17,22 @@ public class MenuBarController {
 
 	private static JMenuItem fileInputMenuItem;
 	private static JMenuItem textInputMenuItem;
+	private static JMenuItem runSingleCycleMenuItem;
+	private static JMenuItem runFullCycleMenuItem;
 
 	private static FrameController frameController;
+	private static PipelineMapController pipelineController;
 
 	private MenuBarController() {
 		frameController = FrameController.getInstance();
+		pipelineController = pipelineController.getInstance();
 		menuBar = MenuBar.getInstance();
 		fileInputMenuItem = menuBar.getFileInputMenuItem();
 		textInputMenuItem = menuBar.getTextInputMenuItem();
+		runSingleCycleMenuItem = menuBar.getRunSingleCycleMenuItem();
+		runFullCycleMenuItem = menuBar.getRunFullCycleMenuItem();
 		addInputOptionsListeners();
+		addRunListeners();
 	}
 
 	public static MenuBarController getInstance() {
@@ -34,8 +41,11 @@ public class MenuBarController {
 		return menuBarController;
 	}
 
+	public void setExecuteMenuVisible(boolean flag) {
+		menuBar.setRunMenuVisible(flag);
+	}
+
 	private void addInputOptionsListeners() {
-		System.out.println("Added Listeners");
 		fileInputMenuItem.addActionListener(new ActionListener() {
 
 			@Override
@@ -68,5 +78,25 @@ public class MenuBarController {
 
 		});
 
+	}
+
+	private void addRunListeners() {
+		runSingleCycleMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pipelineController.singleCycleRun();
+			}
+
+		});
+
+		runFullCycleMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pipelineController.fullExecutionRun();
+			}
+
+		});
 	}
 }
