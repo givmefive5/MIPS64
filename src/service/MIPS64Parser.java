@@ -224,31 +224,36 @@ public class MIPS64Parser {
 		}
 	}
 
-	private static boolean areCorrectRegisterType(char expectedType1, char expectedType2, String rd, String rs,
-			String rt) {
+	private static void areCorrectRegisterType(char expectedType1, char expectedType2, String rd, String rs, String rt)
+			throws InvalidRegisterException {
 		boolean areCorrect = true;
+		List<String> invalidRegisters = new ArrayList<>();
 		try {
 			if (!(rs.length() >= 2 && rs.length() <= 3 && rs.toLowerCase().charAt(0) == expectedType2
 					&& Integer.parseInt(rs.substring(1)) >= 0 && Integer.parseInt(rs.substring(1)) < 32)) {
 				areCorrect = false;
+				invalidRegisters.add(rs);
 			}
 			if (rd != null) {
 				if (!(rd.length() >= 2 && rd.length() <= 3 && rd.toLowerCase().charAt(0) == expectedType1
 						&& Integer.parseInt(rd.substring(1)) >= 0 && Integer.parseInt(rd.substring(1)) < 32)) {
 					areCorrect = false;
+					invalidRegisters.add(rd);
 				}
 			} else {// rt
 				if (!(rt.length() >= 2 && rt.length() <= 3 && rt.toLowerCase().charAt(0) == expectedType1
 						&& Integer.parseInt(rt.substring(1)) >= 0 && Integer.parseInt(rt.substring(1)) < 32)) {
 					areCorrect = false;
+					invalidRegisters.add(rt);
 				}
 			}
 
 		} catch (Exception e) {
 			areCorrect = false;
 		}
-
-		return areCorrect;
+		if (areCorrect == false) {
+			throw new InvalidRegisterException(invalidRegisters.toArray(new String[invalidRegisters.size()]));
+		}
 	}
 
 	// Checks if all registers are all Rs or all Fs.

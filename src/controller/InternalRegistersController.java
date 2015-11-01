@@ -4,7 +4,6 @@ import gui.InternalRegistersPanel;
 
 public class InternalRegistersController {
 	private static InternalRegistersController irController;
-	private static String[][] internalRegisters;
 	private static InternalRegistersPanel irPanel;
 
 	private InternalRegistersController() {
@@ -19,5 +18,9 @@ public class InternalRegistersController {
 
 	public void setValues(String[] irValues) {
 		irPanel.setValues(irValues);
+	}
+
+	public void resetValues() {
+		irPanel.initTableValues();
 	}
 }

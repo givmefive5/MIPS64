@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
 import gui.tablemodels.PipelineMapTableModel;
 
@@ -17,6 +16,7 @@ public class PipelineMapPanel {
 	private static JPanel panel;
 	private static JTable table;
 	private static JScrollPane scrollPane;
+	private static PipelineMapTableModel tableModel;
 
 	private PipelineMapPanel() {
 	}
@@ -46,7 +46,7 @@ public class PipelineMapPanel {
 	}
 
 	public static void initTable() {
-		PipelineMapTableModel tableModel = new PipelineMapTableModel();
+		tableModel = new PipelineMapTableModel();
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 
@@ -60,13 +60,16 @@ public class PipelineMapPanel {
 	}
 
 	public void addCodes(String[] codes) {
-		PipelineMapTableModel tableModel = (PipelineMapTableModel) table.getModel();
+		tableModel = (PipelineMapTableModel) table.getModel();
 		tableModel.addCodes(codes);
 
 	}
 
 	public void addCycleValue(String val, int lineNumber, int cycleNumber) {
-		TableModel tableModel = table.getModel();
 		tableModel.setValueAt(val, lineNumber, cycleNumber);
+	}
+
+	public void resetValues() {
+		tableModel.initPipelineMap();
 	}
 }

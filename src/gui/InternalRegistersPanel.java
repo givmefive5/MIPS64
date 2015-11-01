@@ -44,7 +44,7 @@ public class InternalRegistersPanel {
 		initTable();
 	}
 
-	public static void initTable() {
+	private static void initTable() {
 		tableModel = new InternalRegistersTableModel();
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
@@ -62,6 +62,10 @@ public class InternalRegistersPanel {
 
 	public void setValues(String[] values) {
 		tableModel.setValues(values);
+	}
+
+	public void initTableValues() {
+		tableModel.resetInternalRegisters();
 	}
 
 }

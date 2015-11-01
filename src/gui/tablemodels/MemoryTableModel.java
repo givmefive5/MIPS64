@@ -28,7 +28,7 @@ public class MemoryTableModel extends AbstractTableModel {
 			hex = Integer.toHexString(mem).toUpperCase();
 			hex = StringUtils.leftPad(hex, 4, "0");
 			memory[i][0] = hex;
-			memory[i][1] = "00000000";
+			memory[i][1] = "00";
 			i++;
 		}
 	}
@@ -68,13 +68,13 @@ public class MemoryTableModel extends AbstractTableModel {
 	public void setValueAt(Object value, int row, int col) {
 		String val = (String) value;
 		try {
-			if (val.length() <= 16) {
-				val = StringUtils.leftPad(val, 16, "0");
+			if (val.length() <= 2) {
+				val = StringUtils.leftPad(val, 2, "0");
 
 				new BigInteger(val, 16);
 				memory[row][col] = val;
 				this.fireTableCellUpdated(row, col);
-			} else if (val.length() > 16)
+			} else if (val.length() > 2)
 				throw new Exception();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(MainFrame.getInstance(), val + " is an invalid memory value!");

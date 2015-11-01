@@ -15,6 +15,7 @@ public class MemoryPanel {
 	private static MemoryPanel memoryPanel;
 	private static JPanel panel;
 	private static JTable table;
+	private static MemoryTableModel tableModel;
 
 	private MemoryPanel() {
 	}
@@ -44,7 +45,7 @@ public class MemoryPanel {
 	}
 
 	public static void initTable() {
-		MemoryTableModel tableModel = new MemoryTableModel();
+		tableModel = new MemoryTableModel();
 		table = new JTable(tableModel);
 		table.setFont(new Font("Courier", Font.PLAIN, 12));
 		table.setTableHeader(null);
@@ -57,6 +58,10 @@ public class MemoryPanel {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setSize(panel.getSize());
 		panel.add(scrollPane);
+	}
+
+	public void resetValues() {
+		tableModel.resetValues();
 	}
 
 }

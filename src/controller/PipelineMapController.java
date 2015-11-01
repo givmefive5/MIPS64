@@ -14,7 +14,7 @@ public class PipelineMapController {
 	private static InternalRegistersController internalRegistersController;
 	private static PipelineCyclesService pipelineCyclesService;
 
-	private PipelineMapController() {
+	public PipelineMapController() {
 		pipelineMapPanel = PipelineMapPanel.getInstance();
 		internalRegistersController = InternalRegistersController.getInstance();
 		pipelineCyclesService = new PipelineCyclesService();
@@ -24,6 +24,12 @@ public class PipelineMapController {
 		if (pipelineMapController == null)
 			pipelineMapController = new PipelineMapController();
 		return pipelineMapController;
+	}
+
+	public void resetValues() {
+		pipelineMapPanel.resetValues();
+		pipelineCyclesService = new PipelineCyclesService();
+		internalRegistersController.resetValues();
 	}
 
 	public void setCodeValues(List<Instruction> instructions) {

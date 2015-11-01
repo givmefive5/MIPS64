@@ -20,11 +20,15 @@ public class RegistersController {
 		return registersController;
 	}
 
-	public void setValue(String value, int row, int col) {
+	public static void setValue(String value, int row, int col) {
 		registersTableModel.setValueAt(value, row, col);
 	}
 
 	public String getValue(int row, int col) {
 		return (String) registersTableModel.getValueAt(row, col);
+	}
+
+	public void resetValues() {
+		registersTableModel.resetValues();
 	}
 }

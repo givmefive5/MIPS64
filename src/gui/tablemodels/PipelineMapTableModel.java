@@ -10,7 +10,7 @@ public class PipelineMapTableModel extends AbstractTableModel {
 		initPipelineMap();
 	}
 
-	private void initPipelineMap() {
+	public void initPipelineMap() {
 		pipeline = new String[10][10];
 	}
 

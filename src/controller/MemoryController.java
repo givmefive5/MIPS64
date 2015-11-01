@@ -1,12 +1,10 @@
 package controller;
 
 import gui.MemoryPanel;
-import gui.tablemodels.MemoryTableModel;
 
 public class MemoryController {
 
 	private static MemoryController memoryController;
-	private static String[][] memory;
 	private static MemoryPanel memoryPanel;
 
 	private MemoryController() {
@@ -19,7 +17,13 @@ public class MemoryController {
 		return memoryController;
 	}
 
-	private void getMemoryFromTableModel() {
-		memory = MemoryTableModel.getMemory();
+	public static String getHexWordFromMemory(String baseAddress) {
+		System.out.println("Address :" + baseAddress);
+		// TODO
+		return "10000000111100001111000011110000";
+	}
+
+	public void resetValues() {
+		memoryPanel.resetValues();
 	}
 }

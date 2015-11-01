@@ -62,6 +62,9 @@ public class FrameController {
 				instructions = OpcodeGenerator.setBinaryOpcodes(instructions);
 				codeController.setCodeValues(instructions);
 				menuBarController.setExecuteMenuVisible(true);
+				registersController.resetValues();
+				memoryController.resetValues();
+				pipelineMapController.resetValues();
 				pipelineMapController.setCodeValues(instructions);
 			} else {
 				throw new NoInputFoundException("No lines found in new input");

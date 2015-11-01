@@ -88,24 +88,48 @@ public class InternalRegister {
 		values[9] = value;
 	}
 
+	public String getEXMEMIR() {
+		return values[10];
+	}
+
 	public void setEXMEMIR(String value) {
 		values[10] = value;
+	}
+
+	public String getEXMEMB() {
+		return values[11];
 	}
 
 	public void setEXMEMB(String value) {
 		values[11] = value;
 	}
 
+	public String getMEMWBLMD() {
+		return values[12];
+	}
+
 	public void setMEMWBLMD(String value) {
 		values[12] = value;
+	}
+
+	public String getMEMWBIR() {
+		return values[13];
 	}
 
 	public void setMEMWBIR(String value) {
 		values[13] = value;
 	}
 
+	public String getMEMWBALUOutput() {
+		return values[14];
+	}
+
 	public void setMEMWBALUOutput(String value) {
 		values[14] = value;
+	}
+
+	public String getRn() {
+		return values[15];
 	}
 
 	public void setRn(String value) {
