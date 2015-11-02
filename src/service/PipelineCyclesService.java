@@ -21,6 +21,11 @@ public class PipelineCyclesService {
 	int memLineNumber = -1;
 	int wbLineNumber = -1;
 	int cycleNumber = 1;
+	int ifFinished = -1;
+	int idFinished = -1;
+	int exFinished = -1;
+	int memFinished = -1;
+	int wbFinished = -1;
 
 	boolean toStop = false;
 
@@ -32,12 +37,14 @@ public class PipelineCyclesService {
 
 	public void singleCycleRun() {
 		if (toStop == false) {
+			System.out.println("Cycle: " + cycleNumber);
 			callWB();
 			callMEM();
 			callEX();
 			callID();
 			callIF();
 			cycleNumber++;
+
 		} else {
 			System.out.println("Stopped at Cycle " + cycleNumber);
 		}
@@ -45,11 +52,13 @@ public class PipelineCyclesService {
 	}
 
 	private boolean shouldStall(String functionType, int lineNumber) {
+		if (functionType.equals("ID") && lineNumber == 1 && (cycleNumber == 3 || cycleNumber == 4 || cycleNumber == 5))
+			return true;
 		return false;
 	}
 
 	private void callIF() {
-		if (ifLineNumber < instructions.size()) {
+		if (ifLineNumber < instructions.size() && ifLineNumber - 1 == idFinished) {
 			Instruction ins = instructions.get(ifLineNumber);
 			ir.setIFIDIR(ins.getHexOpcode());
 			if (ins.getCommand().equals("BEQ") || ins.getCommand().equals("J")) {
@@ -61,12 +70,14 @@ public class PipelineCyclesService {
 				idLineNumber = ifLineNumber;
 			}
 			PipelineMapController.setMapValue("IF", ifLineNumber, cycleNumber);
+			ifFinished = ifLineNumber;
 			ifLineNumber++;
 		}
 	}
 
 	private void callID() {
-		if (idLineNumber >= 0) {
+		if (!shouldStall("ID", idLineNumber) && idLineNumber == ifFinished && idLineNumber < instructions.size()
+				&& idLineNumber != idFinished && idLineNumber - 1 == exFinished) {
 			Instruction ins = instructions.get(idLineNumber);
 			String command = ins.getCommand().toUpperCase();
 			BigInteger integer = new BigInteger(ins.getHexOpcode(), 16);
@@ -119,13 +130,15 @@ public class PipelineCyclesService {
 
 			PipelineMapController.setMapValue("ID", idLineNumber, cycleNumber);
 			exLineNumber = idLineNumber;
-			idLineNumber = -1;
+			idFinished = idLineNumber;
+			idLineNumber++;
 		}
 
 	}
 
 	private void callEX() {
-		if (exLineNumber >= 0) {
+		if (exLineNumber < instructions.size() && exLineNumber == idFinished && exLineNumber != exFinished
+				&& exLineNumber - 1 == memFinished) {
 			Instruction ins = instructions.get(exLineNumber);
 
 			String command = ins.getCommand().toUpperCase();
@@ -167,7 +180,6 @@ public class PipelineCyclesService {
 				if (command.equals("DSLL")) {
 					int a = (int) Long.parseLong(ir.getIDEXA(), 16);
 					int immediate = Integer.parseInt(ir.getIDEXIMM(), 16);
-					System.out.println(a + " " + immediate);
 					int shifted = a << immediate;
 					aluOutput = Integer.toHexString(shifted);
 				} else if (command.equals("ANDI")) {
@@ -187,13 +199,15 @@ public class PipelineCyclesService {
 
 			PipelineMapController.setMapValue("EX", exLineNumber, cycleNumber);
 			memLineNumber = exLineNumber;
-			exLineNumber = -1;
+			exFinished = exLineNumber;
+			exLineNumber++;
 		}
 
 	}
 
 	private void callMEM() {
-		if (memLineNumber >= 0) {
+		if (memLineNumber < instructions.size() && memLineNumber == exFinished && memLineNumber != memFinished
+				&& memLineNumber - 1 == wbFinished) {
 			Instruction ins = instructions.get(memLineNumber);
 			ir.setMEMWBIR(ir.getEXMEMIR());
 			ir.setMEMWBALUOutput(ir.getEXMEMALUOutput());
@@ -221,13 +235,14 @@ public class PipelineCyclesService {
 
 			PipelineMapController.setMapValue("MEM", memLineNumber, cycleNumber);
 			wbLineNumber = memLineNumber;
-			memLineNumber = -1;
+			memFinished = memLineNumber;
+			memLineNumber++;
 		}
 	}
 
 	private void callWB() {
 		// TODO Auto-generated method stub
-		if (wbLineNumber >= 0) {
+		if (wbLineNumber < instructions.size() && wbLineNumber == memFinished && wbLineNumber != wbFinished) {
 			Instruction ins = instructions.get(wbLineNumber);
 
 			if (ins.getCommand().equals("LW") || ins.getCommand().equals("LWU")) {
@@ -259,7 +274,6 @@ public class PipelineCyclesService {
 
 			} else if (ins.getCommand().equals("DMULT")) {
 				String aluOutput = ir.getMEMWBALUOutput();
-				System.out.println(aluOutput);
 				RegistersController.setValue(aluOutput.substring(0, 8), 32, 3); // HI
 				RegistersController.setValue(aluOutput.substring(8, 16), 32, 1); // LO
 			} else if (ins.getCommand().equals("MUL.S")) {
@@ -269,6 +283,8 @@ public class PipelineCyclesService {
 			PipelineMapController.setMapValue("WB", wbLineNumber, cycleNumber);
 			if (wbLineNumber == instructions.size() - 1)
 				toStop = true;
+			wbFinished = wbLineNumber;
+			wbLineNumber++;
 		}
 
 	}
