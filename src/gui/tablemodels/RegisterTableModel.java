@@ -28,9 +28,9 @@ public class RegisterTableModel extends AbstractTableModel {
 			registers[i][3] = "0.0";
 		}
 		registers[32][0] = "LO";
-		registers[32][1] = "0000000000000000";
+		registers[32][1] = "00000000";
 		registers[32][2] = "HI";
-		registers[32][3] = "0000000000000000";
+		registers[32][3] = "00000000";
 
 	}
 
@@ -70,7 +70,17 @@ public class RegisterTableModel extends AbstractTableModel {
 		String val = (String) value;
 		if (row == 0)
 			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Registers R0 and F0 can not be edited.");
-		else if (val.length() <= 16 && (col == 1 || (col == 3 && row == 32))) {
+		else if (row == 32) {
+			val = StringUtils.leftPad(val, 8, "0");
+			try {
+				new BigInteger(val, 16);
+				registers[row][col] = val;
+				this.fireTableCellUpdated(row, col);
+			} catch (Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), val + " is an invalid register value!");
+			}
+		} else if (val.length() <= 16 && col == 1) {
 			val = StringUtils.leftPad(val, 16, "0");
 			try {
 				new BigInteger(val, 16);

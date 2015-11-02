@@ -198,26 +198,25 @@ public class PipelineCyclesService {
 			ir.setMEMWBIR(ir.getEXMEMIR());
 			ir.setMEMWBALUOutput(ir.getEXMEMALUOutput());
 			if (ins.getCommand().equals("LW") || ins.getCommand().equals("LWU")) {
-				// load from memory TODO
-				String memoryValueBin = MemoryController.getHexWordFromMemory(ir.getEXMEMALUOutput());
+				String memHex = MemoryController.getHexWordFromMemory(ir.getEXMEMALUOutput());
+				String memValBin = BinaryHexConverter.convertHexToBinary(memHex);
 				String padChar = "0";
 				if (ins.getCommand().equals("LW"))
-					padChar = memoryValueBin.substring(0, 1);
-
-				memoryValueBin = StringUtils.leftPad(memoryValueBin, 64, padChar);
-				String hex = BinaryHexConverter.convertBinaryToHex(memoryValueBin, 16).toUpperCase();
+					padChar = memValBin.substring(0, 1);
+				memValBin = StringUtils.leftPad(memValBin, 64, padChar);
+				String hex = BinaryHexConverter.convertBinaryToHex(memValBin, 16).toUpperCase();
 				ir.setMEMWBLMD(hex);
 			} else if (ins.getCommand().equals("L.S")) {
-				// load from memory TODO
-				String memoryValueBin = "01000010000001010011001100110011";
-				String padChar = "0";
-				memoryValueBin = StringUtils.leftPad(memoryValueBin, 32, padChar);
-				Float val = Float.intBitsToFloat((int) Long.parseLong(memoryValueBin, 2));
-				ir.setMEMWBLMD(val.toString());
+				String memoryValueHex = MemoryController.getHexWordFromMemory(ir.getEXMEMALUOutput());
+				Float floatNum = FloatingPointConverter.convertHexToFloat(memoryValueHex);
+				ir.setMEMWBLMD(floatNum.toString());
 			} else if (ins.getCommand().equals("SW")) {
-				// TODO
+				String word = ir.getEXMEMB().substring(8, 16);
+				MemoryController.storeWordToMemory(word, ir.getEXMEMALUOutput());
 			} else if (ins.getCommand().equals("S.S")) {
-				// TODO
+				String floatString = ir.getEXMEMB();
+				String hex = FloatingPointConverter.convertFloatToHex(Float.parseFloat(floatString));
+				MemoryController.storeWordToMemory(hex, ir.getEXMEMALUOutput());
 			}
 
 			PipelineMapController.setMapValue("MEM", memLineNumber, cycleNumber);
@@ -263,7 +262,6 @@ public class PipelineCyclesService {
 				System.out.println(aluOutput);
 				RegistersController.setValue(aluOutput.substring(0, 8), 32, 3); // HI
 				RegistersController.setValue(aluOutput.substring(8, 16), 32, 1); // LO
-				// WILL CHANGE FOR SURE TODO
 			} else if (ins.getCommand().equals("MUL.S")) {
 				// Store to hi-lo
 				// TODO WILL CHANGE FOR SURE

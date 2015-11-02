@@ -64,4 +64,7 @@ public class MemoryPanel {
 		tableModel.resetValues();
 	}
 
+	public MemoryTableModel getTableModel() {
+		return tableModel;
+	}
 }

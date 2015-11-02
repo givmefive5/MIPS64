@@ -12,4 +12,9 @@ public class BinaryHexConverter {
 		return StringUtils.leftPad(hex, length, "0");
 	}
 
+	public static String convertHexToBinary(String hex) {
+		BigInteger integer = new BigInteger(hex, 16);
+		String bin = StringUtils.leftPad(integer.toString(2), 32, "0");
+		return bin;
+	}
 }
