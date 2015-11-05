@@ -26,7 +26,7 @@ public class PipelineCyclesService {
 	int exFinished = -1;
 	int memFinished = -1;
 	int wbFinished = -1;
-
+	int cycleNumberOfLastWBFinish = -1;
 	boolean toStop = false;
 
 	public PipelineCyclesService() {
@@ -52,8 +52,29 @@ public class PipelineCyclesService {
 	}
 
 	private boolean shouldStall(String functionType, int lineNumber) {
-		if (functionType.equals("ID") && lineNumber == 1 && (cycleNumber == 3 || cycleNumber == 4 || cycleNumber == 5))
-			return true;
+		if (lineNumber > 0 && lineNumber < instructions.size()) {
+			Instruction curr = instructions.get(lineNumber);
+			String rs = curr.getRs();
+			String rt = curr.getRt();
+			int i = lineNumber - 1;
+			System.out
+					.println(lineNumber + " " + wbFinished + " " + " " + cycleNumberOfLastWBFinish + " " + cycleNumber);
+			while (i >= lineNumber - 3 && i >= 0) {
+				Instruction ins = instructions.get(i);
+
+				if ((rs != null && ins.getRd() != null && rs.equals(ins.getRd()))
+						|| (rt != null && ins.getRd() != null && rt.equals(ins.getRd()))) {
+
+					System.out.println("I " + lineNumber + " " + i + " " + wbFinished);
+					if (wbFinished < i) {
+						return true;
+					} else if (wbFinished == i && cycleNumberOfLastWBFinish == cycleNumber)
+						return true;
+				}
+
+				i--;
+			}
+		}
 		return false;
 	}
 
@@ -137,8 +158,8 @@ public class PipelineCyclesService {
 	}
 
 	private void callEX() {
-		if (exLineNumber < instructions.size() && exLineNumber == idFinished && exLineNumber != exFinished
-				&& exLineNumber - 1 == memFinished) {
+		if (!shouldStall("ID", exLineNumber) && exLineNumber < instructions.size() && exLineNumber == idFinished
+				&& exLineNumber != exFinished && exLineNumber - 1 == memFinished) {
 			Instruction ins = instructions.get(exLineNumber);
 
 			String command = ins.getCommand().toUpperCase();
@@ -206,8 +227,8 @@ public class PipelineCyclesService {
 	}
 
 	private void callMEM() {
-		if (memLineNumber < instructions.size() && memLineNumber == exFinished && memLineNumber != memFinished
-				&& memLineNumber - 1 == wbFinished) {
+		if (!shouldStall("ID", memLineNumber) && memLineNumber < instructions.size() && memLineNumber == exFinished
+				&& memLineNumber != memFinished && memLineNumber - 1 == wbFinished) {
 			Instruction ins = instructions.get(memLineNumber);
 			ir.setMEMWBIR(ir.getEXMEMIR());
 			ir.setMEMWBALUOutput(ir.getEXMEMALUOutput());
@@ -242,7 +263,8 @@ public class PipelineCyclesService {
 
 	private void callWB() {
 		// TODO Auto-generated method stub
-		if (wbLineNumber < instructions.size() && wbLineNumber == memFinished && wbLineNumber != wbFinished) {
+		if (!shouldStall("ID", wbLineNumber) && wbLineNumber < instructions.size() && wbLineNumber == memFinished
+				&& wbLineNumber != wbFinished) {
 			Instruction ins = instructions.get(wbLineNumber);
 
 			if (ins.getCommand().equals("LW") || ins.getCommand().equals("LWU")) {
@@ -284,6 +306,7 @@ public class PipelineCyclesService {
 			if (wbLineNumber == instructions.size() - 1)
 				toStop = true;
 			wbFinished = wbLineNumber;
+			cycleNumberOfLastWBFinish = cycleNumber;
 			wbLineNumber++;
 		}
 

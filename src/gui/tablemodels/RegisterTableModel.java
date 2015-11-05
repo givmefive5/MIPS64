@@ -90,7 +90,7 @@ public class RegisterTableModel extends AbstractTableModel {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(MainFrame.getInstance(), val + " is an invalid register value!");
 			}
-		} else if (val.length() > 8 && col == 1)
+		} else if (val.length() > 16 && col == 1)
 			JOptionPane.showMessageDialog(MainFrame.getInstance(), val + " is an invalid register value!");
 		else if (col == 3) {
 			try {

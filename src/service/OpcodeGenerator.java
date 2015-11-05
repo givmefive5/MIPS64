@@ -110,7 +110,11 @@ public class OpcodeGenerator {
 			opcode += getBinaryOfRegister(ins.getRt());
 			int jumpLinkLineNumber = findLabel(instructions, ins.getJumpLink());
 			int relativeOffset = jumpLinkLineNumber - (lineNumber + 1);
-			opcode += StringUtils.leftPad(Integer.toBinaryString(relativeOffset), 16, "0");
+			String binaryOffset = Integer.toBinaryString(relativeOffset);
+			if (binaryOffset.length() > 16)
+				binaryOffset = binaryOffset.substring(binaryOffset.length() - 16, binaryOffset.length());
+			System.out.println(binaryOffset + " " + binaryOffset.length());
+			opcode += StringUtils.leftPad(binaryOffset, 16, "0");
 		}
 
 		return opcode;

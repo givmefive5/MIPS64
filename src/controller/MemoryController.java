@@ -1,5 +1,8 @@
 package controller;
 
+import javax.swing.JOptionPane;
+
+import gui.MainFrame;
 import gui.MemoryPanel;
 import gui.tablemodels.MemoryTableModel;
 
@@ -22,22 +25,29 @@ public class MemoryController {
 
 	public static String getHexWordFromMemory(String baseAddress) {
 		Integer address = Integer.parseInt(baseAddress, 16);
-		int rowIndex = address / 8 - 1024;
-		String word = "";
-		word += memoryTableModel.getValueAt(rowIndex + 3, 1);
-		word += memoryTableModel.getValueAt(rowIndex + 2, 1);
-		word += memoryTableModel.getValueAt(rowIndex + 1, 1);
-		word += memoryTableModel.getValueAt(rowIndex, 1);
-		return word;
+		Double rowIndex = address * 1.0 / 8 - 1024;
+		if (rowIndex < 0 || rowIndex % 1 != 0) {
+			JOptionPane.showMessageDialog(MainFrame.getInstance(),
+					"Address " + baseAddress + " is not a valid memory location");
+			throw new RuntimeException("Invalid memory, Program should stop");
+		} else {
+			String word = (String) memoryTableModel.getValueAt(rowIndex.intValue(), 1);
+			word = word.substring(word.length() - 8, word.length());
+			return word;
+		}
+
 	}
 
-	public static void storeWordToMemory(String hexValue, String baseAddress) {
+	public static void storeWordToMemory(String bit32HexValue, String baseAddress) {
 		Integer address = Integer.parseInt(baseAddress, 16);
-		int rowIndex = address / 8 - 1024;
-		memoryTableModel.setValueAt(hexValue.substring(0, 2), rowIndex + 3, 1);
-		memoryTableModel.setValueAt(hexValue.substring(2, 4), rowIndex + 2, 1);
-		memoryTableModel.setValueAt(hexValue.substring(4, 6), rowIndex + 1, 1);
-		memoryTableModel.setValueAt(hexValue.substring(6, 8), rowIndex, 1);
+		Double rowIndex = address * 1.0 / 8 - 1024;
+		if (rowIndex < 0 || rowIndex % 1 != 0) {
+			JOptionPane.showMessageDialog(MainFrame.getInstance(),
+					"Address " + baseAddress + " is not a valid memory location");
+			throw new RuntimeException("Invalid memory, Program should stop");
+		} else {
+			memoryTableModel.setValueAt(bit32HexValue, rowIndex.intValue(), 1);
+		}
 	}
 
 	public void resetValues() {
