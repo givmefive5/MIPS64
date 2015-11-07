@@ -37,7 +37,7 @@ public class MenuBar {
 		jMenuBar.add(inputMenu);
 
 		runMenu = new JMenu("Execute");
-		runSingleCycleMenuItem = new JMenuItem("Single Cycle");
+		runSingleCycleMenuItem = new JMenuItem("Single Cycle - F4");
 		runFullCycleMenuItem = new JMenuItem("Full Execution");
 		runMenu.add(runSingleCycleMenuItem);
 		runMenu.add(runFullCycleMenuItem);

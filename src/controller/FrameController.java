@@ -27,6 +27,8 @@ public class FrameController {
 	private static RegistersController registersController;
 	private static PipelineMapController pipelineMapController;
 
+	private List<Instruction> instructions;
+
 	private FrameController() {
 	}
 
@@ -55,9 +57,13 @@ public class FrameController {
 		handleInput("TEXT");
 	}
 
+	public List<Instruction> getInstructions() {
+		return instructions;
+	}
+
 	private void handleInput(String inputType) {
 		try {
-			List<Instruction> instructions = MIPS64Parser.parse(input);
+			instructions = MIPS64Parser.parse(input);
 			if (instructions.size() >= 1) {
 				instructions = OpcodeGenerator.setBinaryOpcodes(instructions);
 				codeController.setCodeValues(instructions);

@@ -54,18 +54,15 @@ public class PipelineCyclesService {
 	private boolean shouldStall(String functionType, int lineNumber) {
 		if (lineNumber > 0 && lineNumber < instructions.size()) {
 			Instruction curr = instructions.get(lineNumber);
-			String rs = curr.getRs();
-			String rt = curr.getRt();
+			String rs = curr.getRs().toLowerCase();
+			String rt = curr.getRt().toLowerCase();
 			int i = lineNumber - 1;
-			System.out
-					.println(lineNumber + " " + wbFinished + " " + " " + cycleNumberOfLastWBFinish + " " + cycleNumber);
 			while (i >= lineNumber - 3 && i >= 0) {
 				Instruction ins = instructions.get(i);
 
-				if ((rs != null && ins.getRd() != null && rs.equals(ins.getRd()))
-						|| (rt != null && ins.getRd() != null && rt.equals(ins.getRd()))) {
+				if ((rs != null && ins.getRd() != null && rs.equals(ins.getRd().toLowerCase()))
+						|| (rt != null && ins.getRd() != null && rt.equals(ins.getRd().toLowerCase()))) {
 
-					System.out.println("I " + lineNumber + " " + i + " " + wbFinished);
 					if (wbFinished < i) {
 						return true;
 					} else if (wbFinished == i && cycleNumberOfLastWBFinish == cycleNumber)
@@ -176,7 +173,7 @@ public class PipelineCyclesService {
 			} else if (command.equals("MUL.S") || command.equals("ADD.S")) {
 				Float a = Float.parseFloat(ir.getIDEXA());
 				Float b = Float.parseFloat(ir.getIDEXB());
-				if (command.equals("MUL.S"))
+				if (command.equals("MUL.S")) // MAY BE CHANGED TODO
 					aluOutput = Float.toString(a * b);
 				else if (command.equals("ADD.S"))
 					aluOutput = Float.toString(a + b);
@@ -270,9 +267,11 @@ public class PipelineCyclesService {
 			if (ins.getCommand().equals("LW") || ins.getCommand().equals("LWU")) {
 				int registerIndex = Integer.parseInt(ins.getRd().substring(1));
 				RegistersController.setValue(ir.getMEMWBLMD(), registerIndex, 1);
+				ir.setRn("R" + registerIndex + " = " + ir.getMEMWBLMD());
 			} else if (ins.getCommand().equals("L.S")) {
 				int registerIndex = Integer.parseInt(ins.getRd().substring(1));
 				RegistersController.setValue(ir.getMEMWBLMD(), registerIndex, 3);
+				ir.setRn("F" + registerIndex + " = " + ir.getMEMWBLMD());
 			} else if (ins.getCommand().equals("ADD.S") || ins.getCommand().equals("DADDU")
 					|| ins.getCommand().equals("OR") || ins.getCommand().equals("SLT")
 					|| ins.getCommand().equals("DSLL") || ins.getCommand().equals("DADDIU")
