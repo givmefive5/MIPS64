@@ -28,6 +28,7 @@ public class PipelineCyclesService {
 	int wbFinished = -1;
 	int cycleNumberOfLastWBFinish = -1;
 	boolean toStop = false;
+	boolean branched = false;
 
 	public PipelineCyclesService() {
 		ir = new InternalRegister();
@@ -76,21 +77,75 @@ public class PipelineCyclesService {
 	}
 
 	private void callIF() {
-		if (ifLineNumber < instructions.size() && ifLineNumber - 1 == idFinished) {
+		if (ifLineNumber < instructions.size() && (ifLineNumber - 1 == idFinished || branched)) {
 			Instruction ins = instructions.get(ifLineNumber);
-			ir.setIFIDIR(ins.getHexOpcode());
-			if (ins.getCommand().equals("BEQ") || ins.getCommand().equals("J")) {
-				// TODO
+
+			PipelineMapController.setMapValue("IF", ifLineNumber, cycleNumber);
+			ifFinished = ifLineNumber;
+
+			String opcode = ir.getIFIDIR();
+			String binary = null;
+			if (opcode != null) {
+				binary = BinaryHexConverter.convertHexToBinary(opcode);
+			}
+			System.out.println(binary);
+			if (binary != null && binary.substring(0, 6).equals("000100")
+					&& isEqualRegisters(binary.substring(6, 11), binary.substring(11, 16))) { // BEQ
+				System.out.println("True");
+				int npc;
+				if (ir.getIFIDNPC() != null) {
+					npc = Integer.parseInt(ir.getIFIDNPC(), 16);
+				} else {
+					npc = 0;
+				}
+				int imm = Integer.parseInt(binary.substring(16), 2) * 4;
+				System.out.println("NPC " + npc + " IMM " + imm);
+				String hex = StringUtils.leftPad(Integer.toHexString(npc + imm), 16, "0").toUpperCase();
+				ir.setIFIDNPC(hex);
+				ir.setPC(hex);
+				idLineNumber = ifLineNumber;
+				ifLineNumber = Integer.parseInt(hex, 16) / 4;
+				branched = true;
+				System.out.println("LineNumber + " + ifLineNumber);
+			} else if (binary != null && binary.substring(0, 6).equals("000010")) { // J
+				String address = binary.substring(8) + "00";
+				String hex = BinaryHexConverter.convertBinaryToHex(address, 16).toUpperCase();
+				ir.setIFIDNPC(hex);
+				ir.setPC(hex);
+				idLineNumber = ifLineNumber;
+				ifLineNumber = Integer.parseInt(hex, 16) / 4;
+				branched = true;
 			} else {
-				String npc = StringUtils.leftPad(Integer.toString((ins.getLineNumber() + 1) * 4), 16, "0");
+				String npc = StringUtils.leftPad(Integer.toHexString((ins.getLineNumber() + 1) * 4), 16, "0")
+						.toUpperCase();
+				System.out.println("NPC " + npc);
 				ir.setIFIDNPC(npc);
 				ir.setPC(npc);
 				idLineNumber = ifLineNumber;
+				ifLineNumber++;
+				branched = false;
 			}
-			PipelineMapController.setMapValue("IF", ifLineNumber, cycleNumber);
-			ifFinished = ifLineNumber;
-			ifLineNumber++;
+			ir.setIFIDIR(ins.getHexOpcode());
 		}
+
+	}
+
+	private boolean isEqualRegisters(String regBin1, String regBin2) { // for
+																		// BEQ
+		if (regBin1 == null || regBin2 == null)
+			return false;
+		else {
+			int index1 = Integer.parseInt(regBin1, 2);
+			int index2 = Integer.parseInt(regBin2, 2);
+			System.out.println("Index 1 " + index1 + " Index 2 " + index2);
+			String val1 = RegistersController.getInstance().getValue(index1, 1);
+			String val2 = RegistersController.getInstance().getValue(index2, 1);
+			if (val1.equals(val2))
+				return true;
+			else
+				return false;
+		}
+
 	}
 
 	private void callID() {
@@ -151,7 +206,6 @@ public class PipelineCyclesService {
 			idFinished = idLineNumber;
 			idLineNumber++;
 		}
-
 	}
 
 	private void callEX() {
@@ -173,9 +227,10 @@ public class PipelineCyclesService {
 			} else if (command.equals("MUL.S") || command.equals("ADD.S")) {
 				Float a = Float.parseFloat(ir.getIDEXA());
 				Float b = Float.parseFloat(ir.getIDEXB());
-				if (command.equals("MUL.S")) // MAY BE CHANGED TODO
+				if (command.equals("MUL.S")) // MAY BE CHANGED requires 6 EX
+												// cycles TODO
 					aluOutput = Float.toString(a * b);
-				else if (command.equals("ADD.S"))
+				else if (command.equals("ADD.S")) // TODO requires 4 EX cycles
 					aluOutput = Float.toString(a + b);
 			} else if (command.equals("DADDU") || command.equals("DMULT") || command.equals("OR")
 					|| command.equals("SLT")) {
@@ -293,13 +348,12 @@ public class PipelineCyclesService {
 					ir.setRn("R" + rd + " = " + ir.getMEMWBALUOutput());
 				}
 
-			} else if (ins.getCommand().equals("DMULT")) {
-				String aluOutput = ir.getMEMWBALUOutput();
+			} else if (ins.getCommand().equals("DMULT") || ins.getCommand().equals("MUL.S")) {
+				String aluOutput = ir.getMEMWBALUOutput(); // NOT SURE IF MUL.S
+															// is correct here
+															// TODO
 				RegistersController.setValue(aluOutput.substring(0, 8), 32, 3); // HI
 				RegistersController.setValue(aluOutput.substring(8, 16), 32, 1); // LO
-			} else if (ins.getCommand().equals("MUL.S")) {
-				// Store to hi-lo
-				// TODO WILL CHANGE FOR SURE
 			}
 			PipelineMapController.setMapValue("WB", wbLineNumber, cycleNumber);
 			if (wbLineNumber == instructions.size() - 1)

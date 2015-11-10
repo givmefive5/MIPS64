@@ -1,0 +1,7 @@
+J L1
+DADDU r1, r2, r3
+DADDU r1, r2, r3
+DADDU r1, r2, r3
+DADDU r1, r2, r3
+DADDU r1, r2, r3
+L1: DADDU r1, r2, r3
