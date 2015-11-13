@@ -333,11 +333,11 @@ public class PipelineCyclesService {
 			} else if (ins.getCommand().equals("ADD.S") || ins.getCommand().equals("DADDU")
 					|| ins.getCommand().equals("OR") || ins.getCommand().equals("SLT")
 					|| ins.getCommand().equals("DSLL") || ins.getCommand().equals("DADDIU")
-					|| ins.getCommand().equals("ANDI")) {
+					|| ins.getCommand().equals("ANDI") || ins.getCommand().equals("MUL.S")) {
 				BigInteger integer = new BigInteger(ins.getHexOpcode(), 16);
 				String binary = StringUtils.leftPad(integer.toString(2), 32, "0");
 				int rd;
-				if (ins.getCommand().equals("ADD.S")) {
+				if (ins.getCommand().equals("ADD.S") || ins.getCommand().equals("MUL.S")) {
 					rd = Integer.parseInt(binary.substring(21, 26), 2);
 					RegistersController.setValue(ir.getMEMWBALUOutput(), rd, 3);
 					ir.setRn("F" + rd + " = " + ir.getMEMWBALUOutput());
@@ -352,13 +352,9 @@ public class PipelineCyclesService {
 				}
 
 			} else if (ins.getCommand().equals("DMULT")) {
-				String aluOutput = ir.getMEMWBALUOutput(); // NOT SURE IF MUL.S
-															// is correct here
-															// TODO
+				String aluOutput = ir.getMEMWBALUOutput();
 				RegistersController.setValue(aluOutput.substring(0, 8), 32, 3); // HI
 				RegistersController.setValue(aluOutput.substring(8, 16), 32, 1); // LO
-			} else if (ins.getCommand().equals("MUL.S")) {
-				RegistersController.setValue(ir.getMEMWBALUOutput(), 32, 1);
 			}
 			PipelineMapController.setMapValue("WB", wbLineNumber, cycleNumber);
 			if (wbLineNumber == instructions.size() - 1)

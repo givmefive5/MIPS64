@@ -5,11 +5,12 @@ import java.util.NoSuchElementException;
 import Model.Instruction;
 import Model.InternalRegister;
 import controller.PipelineMapController;
+import service.RevisedPipelineService;
 
 public class EXMULSService extends PipelineFunction {
 
-	public EXMULSService(InternalRegister ir) {
-		super(ir);
+	public EXMULSService(InternalRegister ir, RevisedPipelineService pipelineService) {
+		super(ir, pipelineService);
 	}
 
 	@Override
@@ -17,9 +18,12 @@ public class EXMULSService extends PipelineFunction {
 		try {
 			if (queue.peekFirst() != null && queue.peekFirst().isIdFinished()) {
 				Instruction ins = queue.remove();
-				System.out.println("EXMULS " + cycleNumber + " " + ins.getLineNumber());
 				PipelineMapController.setMapValue("EXMULS", ins.getLineNumber(), cycleNumber);
 				ins.setExFinished(ins.getExFinished() + 1);
+				if (ins.getExFinished() == 6) {
+					pipelineService.addInstructionTo("MEM", ins.getLineNumber());
+					pipelineService.addInstructionTo("WB", ins.getLineNumber());
+				}
 			}
 		} catch (NoSuchElementException e) {
 

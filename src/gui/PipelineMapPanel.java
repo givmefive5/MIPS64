@@ -67,6 +67,7 @@ public class PipelineMapPanel {
 
 	public void addCycleValue(String val, int lineNumber, int cycleNumber) {
 		tableModel.setValueAt(val, lineNumber, cycleNumber);
+		table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, table.getColumnCount(), true));
 	}
 
 	public void resetValues() {

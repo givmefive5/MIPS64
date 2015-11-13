@@ -5,10 +5,11 @@ import java.util.NoSuchElementException;
 import Model.Instruction;
 import Model.InternalRegister;
 import controller.PipelineMapController;
+import service.RevisedPipelineService;
 
 public class MEMService extends PipelineFunction {
-	public MEMService(InternalRegister ir) {
-		super(ir);
+	public MEMService(InternalRegister ir, RevisedPipelineService pipelineService) {
+		super(ir, pipelineService);
 	}
 
 	@Override
@@ -17,8 +18,6 @@ public class MEMService extends PipelineFunction {
 			Instruction peek = queue.peekFirst();
 			if (peek != null && isExFinished(peek)) {
 				Instruction ins = queue.remove();
-
-				System.out.println("MEM " + cycleNumber + " " + ins.getLineNumber());
 				PipelineMapController.setMapValue("MEM", ins.getLineNumber(), cycleNumber);
 				ins.setMemFinished(true);
 			}

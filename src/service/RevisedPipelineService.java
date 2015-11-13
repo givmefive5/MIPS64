@@ -29,12 +29,12 @@ public class RevisedPipelineService {
 	public RevisedPipelineService(InternalRegister irs) {
 		this.ir = irs;
 		ifService = new IFService(ir, this);
-		idService = new IDService(ir);
-		exRegService = new EXRegService(ir);
-		exAddsService = new EXADDSService(ir);
-		exMulsService = new EXMULSService(ir);
-		memService = new MEMService(ir);
-		wbService = new WBService(ir);
+		idService = new IDService(ir, this);
+		exRegService = new EXRegService(ir, this);
+		exAddsService = new EXADDSService(ir, this);
+		exMulsService = new EXMULSService(ir, this);
+		memService = new MEMService(ir, this);
+		wbService = new WBService(ir, this);
 	}
 
 	public void setInstructions(List<Instruction> instructions) {

@@ -1,0 +1,4 @@
+L1: MUL.S F1, F2, F3
+DADDU r1, r2, r3
+J L1
+DADDU r1, r2, r3

@@ -21,6 +21,7 @@ public class Instruction {
 	private int exFinished = 0;
 	private boolean memFinished = false;
 	private boolean wbFinished = false;
+	private int wbFinishedAtCycleNumber = -1;
 
 	public Instruction(int lineNumber, String line, String command, String rd, String rs, String rt, String imm,
 			String shift, String label, String jumpLink, String comment) {
@@ -84,6 +85,14 @@ public class Instruction {
 
 	public void setWbFinished(boolean wbFinished) {
 		this.wbFinished = wbFinished;
+	}
+
+	public int getWbFinishedAtCycleNumber() {
+		return wbFinishedAtCycleNumber;
+	}
+
+	public void setWbFinishedAtCycleNumber(int wbFinishedAtCycleNumber) {
+		this.wbFinishedAtCycleNumber = wbFinishedAtCycleNumber;
 	}
 
 	public String getOpcode() {
