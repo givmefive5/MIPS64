@@ -1,5 +1,6 @@
 package controller;
 
+import Model.InternalRegister;
 import gui.InternalRegistersPanel;
 
 public class InternalRegistersController {
@@ -16,11 +17,15 @@ public class InternalRegistersController {
 		return irController;
 	}
 
-	public void setValues(String[] irValues) {
-		irPanel.setValues(irValues);
-	}
-
 	public void resetValues() {
 		irPanel.initTableValues();
+	}
+
+	public void fireDataChanged() {
+		irPanel.fireDataChanged();
+	}
+
+	public InternalRegister getInternalRegisters() {
+		return irPanel.getInternalRegisters();
 	}
 }

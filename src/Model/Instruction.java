@@ -16,6 +16,12 @@ public class Instruction {
 	private String opcode;
 	private String hexOpcode;
 
+	private boolean ifFinished = false;
+	private boolean idFinished = false;
+	private int exFinished = 0;
+	private boolean memFinished = false;
+	private boolean wbFinished = false;
+
 	public Instruction(int lineNumber, String line, String command, String rd, String rs, String rt, String imm,
 			String shift, String label, String jumpLink, String comment) {
 		super();
@@ -30,6 +36,54 @@ public class Instruction {
 		this.label = label;
 		this.jumpLink = jumpLink;
 		this.comment = comment;
+	}
+
+	public void resetPipelineFlags() {
+		ifFinished = false;
+		idFinished = false;
+		exFinished = 0;
+		memFinished = false;
+		wbFinished = false;
+	}
+
+	public boolean isIfFinished() {
+		return ifFinished;
+	}
+
+	public void setIfFinished(boolean ifFinished) {
+		this.ifFinished = ifFinished;
+	}
+
+	public boolean isIdFinished() {
+		return idFinished;
+	}
+
+	public void setIdFinished(boolean idFinished) {
+		this.idFinished = idFinished;
+	}
+
+	public int getExFinished() {
+		return exFinished;
+	}
+
+	public void setExFinished(int exFinished) {
+		this.exFinished = exFinished;
+	}
+
+	public boolean isMemFinished() {
+		return memFinished;
+	}
+
+	public void setMemFinished(boolean memFinished) {
+		this.memFinished = memFinished;
+	}
+
+	public boolean isWbFinished() {
+		return wbFinished;
+	}
+
+	public void setWbFinished(boolean wbFinished) {
+		this.wbFinished = wbFinished;
 	}
 
 	public String getOpcode() {

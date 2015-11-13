@@ -7,11 +7,12 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.commons.lang3.StringUtils;
 
+import Model.Register;
 import gui.MainFrame;
 
 public class RegisterTableModel extends AbstractTableModel {
 
-	static String[][] registers;
+	static Register[][] registers;
 
 	public RegisterTableModel() {
 		super();
@@ -19,23 +20,19 @@ public class RegisterTableModel extends AbstractTableModel {
 	}
 
 	private void initRegisters() {
-		registers = new String[33][4];
+		registers = new Register[33][4];
 
 		for (int i = 0; i < 32; i++) {
-			registers[i][0] = "R" + i;
-			registers[i][1] = "0000000000000000";
-			registers[i][2] = "F" + i;
-			registers[i][3] = "0.0";
+			registers[i][0] = new Register("R" + i);
+			registers[i][1] = new Register("0000000000000000");
+			registers[i][2] = new Register("F" + i);
+			registers[i][3] = new Register("0.0");
 		}
-		registers[32][0] = "LO";
-		registers[32][1] = "00000000";
-		registers[32][2] = "HI";
-		registers[32][3] = "00000000";
+		registers[32][0] = new Register("LO");
+		registers[32][1] = new Register("00000000");
+		registers[32][2] = new Register("HI");
+		registers[32][3] = new Register("00000000");
 
-	}
-
-	public static String[][] getRegisters() {
-		return registers;
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class RegisterTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return registers[rowIndex][columnIndex];
+		return registers[rowIndex][columnIndex].getValue();
 	}
 
 	@Override
@@ -74,7 +71,7 @@ public class RegisterTableModel extends AbstractTableModel {
 			val = StringUtils.leftPad(val, 8, "0");
 			try {
 				new BigInteger(val, 16);
-				registers[row][col] = val;
+				registers[row][col].setValue(val);
 				this.fireTableCellUpdated(row, col);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -84,7 +81,7 @@ public class RegisterTableModel extends AbstractTableModel {
 			val = StringUtils.leftPad(val, 16, "0");
 			try {
 				new BigInteger(val, 16);
-				registers[row][col] = val;
+				registers[row][col].setValue(val);
 				this.fireTableCellUpdated(row, col);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -95,7 +92,7 @@ public class RegisterTableModel extends AbstractTableModel {
 		else if (col == 3) {
 			try {
 				Double.parseDouble(val);
-				registers[row][col] = val;
+				registers[row][col].setValue(val);
 				this.fireTableCellUpdated(row, col);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(MainFrame.getInstance(), val + " is an invalid floating point value!");

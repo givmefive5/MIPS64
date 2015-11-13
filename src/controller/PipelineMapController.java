@@ -4,20 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.Instruction;
+import Model.InternalRegister;
 import gui.PipelineMapPanel;
-import service.PipelineCyclesService;
+import service.RevisedPipelineService;
 
 public class PipelineMapController {
 	private static PipelineMapController pipelineMapController;
 	private static PipelineMapPanel pipelineMapPanel;
 	private String[] codes;
 	private static InternalRegistersController internalRegistersController;
-	private static PipelineCyclesService pipelineCyclesService;
+	private static RevisedPipelineService pipelineService;
 
 	public PipelineMapController() {
 		pipelineMapPanel = PipelineMapPanel.getInstance();
 		internalRegistersController = InternalRegistersController.getInstance();
-		pipelineCyclesService = new PipelineCyclesService();
+		InternalRegister irs = internalRegistersController.getInternalRegisters();
+		pipelineService = new RevisedPipelineService(irs);
 	}
 
 	public static PipelineMapController getInstance() {
@@ -28,8 +30,9 @@ public class PipelineMapController {
 
 	public void resetValues() {
 		pipelineMapPanel.resetValues();
-		pipelineCyclesService = new PipelineCyclesService();
 		internalRegistersController.resetValues();
+		InternalRegister irs = internalRegistersController.getInternalRegisters();
+		pipelineService = new RevisedPipelineService(irs);
 	}
 
 	public void setCodeValues(List<Instruction> instructions) {
@@ -39,7 +42,7 @@ public class PipelineMapController {
 		}
 		this.codes = codes.toArray(new String[codes.size()]);
 		pipelineMapPanel.addCodes(this.codes);
-		pipelineCyclesService.setInstructions(instructions);
+		pipelineService.setInstructions(instructions);
 	}
 
 	public static void setMapValue(String value, int lineNumber, int cycleNumber) {
@@ -47,14 +50,12 @@ public class PipelineMapController {
 	}
 
 	public void singleCycleRun() {
-		pipelineCyclesService.singleCycleRun();
-		String[] internalRegisterValues = pipelineCyclesService.getValues();
-		internalRegistersController.setValues(internalRegisterValues);
+		pipelineService.singleCycleRun();
+		internalRegistersController.fireDataChanged();
 	}
 
 	public void fullExecutionRun() {
-		pipelineCyclesService.fullExecutionRun();
-		String[] internalRegisterValues = pipelineCyclesService.getValues();
-		internalRegistersController.setValues(internalRegisterValues);
+		pipelineService.fullExecutionRun();
+		internalRegistersController.fireDataChanged();
 	}
 }

@@ -8,10 +8,20 @@ public class RegistersController {
 	private static RegistersController registersController;
 	private static RegistersPanel registersPanel;
 	private static RegisterTableModel registersTableModel;
+	private static boolean[][] locks;
 
 	private RegistersController() {
 		registersPanel = RegistersPanel.getInstance();
 		registersTableModel = registersPanel.getTableModel();
+		initLocks();
+	}
+
+	private void initLocks() {
+		locks = new boolean[32][2];
+		for (int i = 0; i < 32; i++) {
+			locks[i][0] = false;
+			locks[i][1] = false;
+		}
 	}
 
 	public static RegistersController getInstance() {

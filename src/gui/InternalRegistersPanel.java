@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+import Model.InternalRegister;
 import gui.tablemodels.InternalRegistersTableModel;
 
 public class InternalRegistersPanel {
@@ -60,12 +61,16 @@ public class InternalRegistersPanel {
 		panel.add(scrollPane);
 	}
 
-	public void setValues(String[] values) {
-		tableModel.setValues(values);
-	}
-
 	public void initTableValues() {
 		tableModel.resetInternalRegisters();
+	}
+
+	public void fireDataChanged() {
+		tableModel.fireDataChanged();
+	}
+
+	public InternalRegister getInternalRegisters() {
+		return tableModel.getInternalRegisters();
 	}
 
 }

@@ -30,8 +30,8 @@ public class PipelineCyclesService {
 	boolean toStop = false;
 	boolean branched = false;
 
-	public PipelineCyclesService() {
-		ir = new InternalRegister();
+	public PipelineCyclesService(InternalRegister ir) {
+		this.ir = ir;
 		// TODO: Using the line numbers to check whether or not an instruction
 		// needs to stall or not.
 	}
@@ -57,12 +57,15 @@ public class PipelineCyclesService {
 			Instruction curr = instructions.get(lineNumber);
 			String rs = curr.getRs().toLowerCase();
 			String rt = curr.getRt().toLowerCase();
+
 			int i = lineNumber - 1;
 			while (i >= lineNumber - 3 && i >= 0) {
 				Instruction ins = instructions.get(i);
 
-				if ((rs != null && ins.getRd() != null && rs.equals(ins.getRd().toLowerCase()))
-						|| (rt != null && ins.getRd() != null && rt.equals(ins.getRd().toLowerCase()))) {
+				if ((rs != null && ins.getRd() != null && rs.equals(ins.getRd().toLowerCase())
+						&& (!rs.equals("r0") && !rs.equals("f0")))
+						|| (rt != null && ins.getRd() != null && rt.equals(ins.getRd().toLowerCase())
+								&& (!rt.equals("r0") && !rt.equals("f0")))) {
 
 					if (wbFinished < i) {
 						return true;
@@ -348,12 +351,14 @@ public class PipelineCyclesService {
 					ir.setRn("R" + rd + " = " + ir.getMEMWBALUOutput());
 				}
 
-			} else if (ins.getCommand().equals("DMULT") || ins.getCommand().equals("MUL.S")) {
+			} else if (ins.getCommand().equals("DMULT")) {
 				String aluOutput = ir.getMEMWBALUOutput(); // NOT SURE IF MUL.S
 															// is correct here
 															// TODO
 				RegistersController.setValue(aluOutput.substring(0, 8), 32, 3); // HI
 				RegistersController.setValue(aluOutput.substring(8, 16), 32, 1); // LO
+			} else if (ins.getCommand().equals("MUL.S")) {
+				RegistersController.setValue(ir.getMEMWBALUOutput(), 32, 1);
 			}
 			PipelineMapController.setMapValue("WB", wbLineNumber, cycleNumber);
 			if (wbLineNumber == instructions.size() - 1)
@@ -369,10 +374,6 @@ public class PipelineCyclesService {
 		while (toStop == false) {
 			singleCycleRun();
 		}
-	}
-
-	public String[] getValues() {
-		return ir.getValues();
 	}
 
 	public void setInstructions(List<Instruction> instructions) {
