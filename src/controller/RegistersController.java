@@ -41,4 +41,49 @@ public class RegistersController {
 	public void resetValues() {
 		registersTableModel.resetValues();
 	}
+
+	public boolean isLocked(String r) {
+		if (r != null) {
+			if (r.substring(0, 1).toLowerCase().equals("r")) {
+				return registersTableModel.isLocked(Integer.parseInt(r.substring(1)), 1);
+			} else if (r.substring(0, 1).toLowerCase().equals("f")) {
+				return registersTableModel.isLocked(Integer.parseInt(r.substring(1)), 3);
+			}
+		}
+		return false;
+
+	}
+
+	public void lock(String rd) {
+		if (rd != null)
+			if (!rd.substring(1).equals("0")) {
+				if (rd.substring(0, 1).toLowerCase().equals("r")) {
+					registersTableModel.lock(Integer.parseInt(rd.substring(1)), 1);
+				} else if (rd.substring(0, 1).toLowerCase().equals("f")) {
+					registersTableModel.lock(Integer.parseInt(rd.substring(1)), 3);
+				}
+			}
+
+	}
+
+	public void unlock(String rd, int cycleNumber) {
+		if (rd != null)
+			if (!rd.substring(1).equals("0")) {
+				if (rd.substring(0, 1).toLowerCase().equals("r")) {
+					registersTableModel.unlock(Integer.parseInt(rd.substring(1)), 1, cycleNumber);
+				} else if (rd.substring(0, 1).toLowerCase().equals("f")) {
+					registersTableModel.unlock(Integer.parseInt(rd.substring(1)), 3, cycleNumber);
+				}
+			}
+	}
+
+	public int getCycleNumberReleased(String r) {
+		if (r != null)
+			if (r.substring(0, 1).toLowerCase().equals("r")) {
+				return registersTableModel.getCycleNumberReleased(Integer.parseInt(r.substring(1)), 1);
+			} else if (r.substring(0, 1).toLowerCase().equals("f")) {
+				return registersTableModel.getCycleNumberReleased(Integer.parseInt(r.substring(1)), 3);
+			}
+		return -1;
+	}
 }

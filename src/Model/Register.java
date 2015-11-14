@@ -4,10 +4,12 @@ public class Register {
 
 	private String value;
 	private boolean isLocked;
+	private int cycleNumberReleased;
 
 	public Register(String value) {
 		this.value = value;
-		isLocked = true;
+		isLocked = false;
+		cycleNumberReleased = -1;
 	}
 
 	public String getValue() {
@@ -24,6 +26,14 @@ public class Register {
 
 	public void setLocked(boolean isLocked) {
 		this.isLocked = isLocked;
+	}
+
+	public int getCycleNumberReleased() {
+		return cycleNumberReleased;
+	}
+
+	public void setCycleNumberReleased(int cycleNumberReleased) {
+		this.cycleNumberReleased = cycleNumberReleased;
 	}
 
 }

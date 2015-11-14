@@ -99,4 +99,22 @@ public class RegisterTableModel extends AbstractTableModel {
 			}
 		}
 	}
+
+	public boolean isLocked(int row, int col) {
+		return registers[row][col].isLocked();
+	}
+
+	public void lock(int row, int col) {
+		registers[row][col].setLocked(true);
+	}
+
+	public void unlock(int row, int col, int cycleNumber) {
+		registers[row][col].setLocked(false);
+		registers[row][col].setCycleNumberReleased(cycleNumber);
+	}
+
+	public int getCycleNumberReleased(int row, int col) {
+		return registers[row][col].getCycleNumberReleased();
+	}
+
 }

@@ -90,4 +90,8 @@ public class RevisedPipelineService {
 
 	}
 
+	public Instruction peekAtIDService() {
+		return idService.peek();
+	}
+
 }
