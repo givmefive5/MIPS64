@@ -18,6 +18,18 @@ public class EXADDSService extends PipelineFunction {
 		try {
 			if (queue.peekFirst() != null && queue.peekFirst().isIdFinished()) {
 				Instruction ins = queue.remove();
+
+				String cond = "0";
+				String aluOutput;
+				Float a = Float.parseFloat(ir.getIDEXA());
+				Float b = Float.parseFloat(ir.getIDEXB());
+				aluOutput = Float.toString(a + b);
+
+				ir.setEXMEMALUOutputADDS(aluOutput);
+				ir.setEXMEMCondADDS(cond);
+				ir.setEXMEMIRADDS(ir.getIDEXIR());
+				ir.setEXMEMBADDS(ir.getIDEXB());
+
 				PipelineMapController.setMapValue("EXADDS", ins.getLineNumber(), cycleNumber);
 				ins.setExFinished(ins.getExFinished() + 1);
 				if (ins.getExFinished() == 4) {

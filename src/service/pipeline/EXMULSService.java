@@ -18,6 +18,18 @@ public class EXMULSService extends PipelineFunction {
 		try {
 			if (queue.peekFirst() != null && queue.peekFirst().isIdFinished()) {
 				Instruction ins = queue.remove();
+
+				String cond = "0";
+				String aluOutput;
+				Float a = Float.parseFloat(ir.getIDEXA());
+				Float b = Float.parseFloat(ir.getIDEXB());
+				aluOutput = Float.toString(a * b);
+
+				ir.setEXMEMALUOutputMULS(aluOutput);
+				ir.setEXMEMCondMULS(cond);
+				ir.setEXMEMIRMULS(ir.getIDEXIR());
+				ir.setEXMEMBMULS(ir.getIDEXB());
+
 				PipelineMapController.setMapValue("EXMULS", ins.getLineNumber(), cycleNumber);
 				ins.setExFinished(ins.getExFinished() + 1);
 				if (ins.getExFinished() == 6) {
