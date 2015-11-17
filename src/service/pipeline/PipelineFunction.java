@@ -24,5 +24,8 @@ public abstract class PipelineFunction {
 	}
 
 	public abstract void run(int cycleNumber);
-
+	
+	public Instruction peek() {
+		return queue.peek();
+	}
 }
