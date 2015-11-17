@@ -7,7 +7,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.TableColumnModel;
+
+import org.jdesktop.swingx.prompt.PromptSupport;
 
 import gui.tablemodels.MemoryTableModel;
 
@@ -16,6 +19,7 @@ public class MemoryPanel {
 	private static JPanel panel;
 	private static JTable table;
 	private static MemoryTableModel tableModel;
+	private static JTextField searchField;
 
 	private MemoryPanel() {
 	}
@@ -56,8 +60,13 @@ public class MemoryPanel {
 
 		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setSize(panel.getSize());
-		panel.add(scrollPane);
+		scrollPane.setSize(panel.getWidth(), panel.getHeight() - 40);
+
+		searchField = new JTextField();
+		searchField.setSize(80, 40);
+		PromptSupport.setPrompt("Search Memory..", searchField);
+		panel.add(searchField, BorderLayout.NORTH);
+		panel.add(scrollPane, BorderLayout.CENTER);
 	}
 
 	public void resetValues() {
@@ -67,4 +76,9 @@ public class MemoryPanel {
 	public MemoryTableModel getTableModel() {
 		return tableModel;
 	}
+
+	public JTextField getSearchField() {
+		return searchField;
+	}
+
 }

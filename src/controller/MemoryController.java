@@ -1,6 +1,10 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 import gui.MainFrame;
 import gui.MemoryPanel;
@@ -15,12 +19,32 @@ public class MemoryController {
 	private MemoryController() {
 		memoryPanel = MemoryPanel.getInstance();
 		memoryTableModel = memoryPanel.getTableModel();
+		addListenerToSearchField();
 	}
 
 	public static MemoryController getInstance() {
 		if (memoryController == null)
 			memoryController = new MemoryController();
 		return memoryController;
+	}
+
+	private void addListenerToSearchField() {
+		memoryPanel.getSearchField().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String query = memoryPanel.getSearchField().getText();
+				Integer address = Integer.parseInt(query, 16);
+				Double rowIndex = address * 1.0 / 8 - 1024;
+				if (rowIndex < 0 || rowIndex % 1 != 0) {
+					JOptionPane.showMessageDialog(MainFrame.getInstance(),
+							"Address " + query + " is not a valid memory location");
+				} else {
+					JTable table = memoryPanel.getTable();
+					table.scrollRectToVisible(table.getCellRect(rowIndex.intValue(), 1, true));
+				}
+
+			}
+		});
 	}
 
 	public static String getHexWordFromMemory(String baseAddress) {
