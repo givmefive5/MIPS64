@@ -92,8 +92,6 @@ public class IDService extends PipelineFunction {
 		}
 	}
 
-	public Instruction peek() {
-		return queue.peek();
-	}
+	
 
 }

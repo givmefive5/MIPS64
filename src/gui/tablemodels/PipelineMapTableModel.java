@@ -11,7 +11,7 @@ public class PipelineMapTableModel extends AbstractTableModel {
 	}
 
 	public void initPipelineMap() {
-		pipeline = new String[10][10];
+		pipeline = new String[1][5];
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class PipelineMapTableModel extends AbstractTableModel {
 	}
 
 	public void addCodes(String[] codes) {
-		String[][] newTable = new String[codes.length][10];
+		String[][] newTable = new String[codes.length][5];
 		for (int i = 0; i < codes.length; i++) {
 			newTable[i][0] = codes[i];
 		}

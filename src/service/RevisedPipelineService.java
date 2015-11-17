@@ -55,6 +55,14 @@ public class RevisedPipelineService {
 	}
 
 	public void fullExecutionRun() {
+		boolean isFinished = false;
+		while(!isFinished){
+			singleCycleRun();
+			if(ifService.peek() == null && idService.peek() == null && exRegService.peek() == null
+					&& exMulsService.peek() == null && exAddsService.peek() == null 
+					&& memService.peek() == null && wbService.peek() == null)
+				isFinished = true;
+		}
 		// TODO Auto-generated method stub
 	}
 

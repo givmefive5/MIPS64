@@ -31,7 +31,7 @@ public class IFService extends PipelineFunction {
 			Instruction idPeek = pipelineService.peekAtIDService();
 
 			if (idPeek != null && idPeek.getLineNumber() == prevLineNumber) {
-
+				System.out.println("ID STILL TO EXECUTE FIRST");
 			} else if (peek != null) {
 				if ((peek.isIdFinished() == true && peek.isWbFinished() == false) || (peek.isIdFinished()
 						&& peek.isWbFinished() && peek.getWbFinishedAtCycleNumber() == cycleNumber)) {
