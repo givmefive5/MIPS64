@@ -38,13 +38,9 @@ public class IDService extends PipelineFunction {
 				String binary = StringUtils.leftPad(integer.toString(2), 32, "0");
 
 				String imm, padChar;
-				if (command.equals("DSLL")) {
-					imm = binary.substring(21, 26);
-					padChar = "0";
-				} else {
-					imm = binary.substring(16, 32);
-					padChar = imm.substring(0, 1);
-				}
+
+				imm = binary.substring(16, 32);
+				padChar = imm.substring(0, 1);
 				imm = StringUtils.leftPad(imm, 64, padChar);
 				imm = BinaryHexConverter.convertBinaryToHex(imm, 16);
 
@@ -53,25 +49,11 @@ public class IDService extends PipelineFunction {
 
 				String a, b;
 
-				if (command.equals("ADD.S") || command.equals("MUL.S")) {
-					regA = Integer.parseInt(binary.substring(16, 21), 2);
-					regB = Integer.parseInt(binary.substring(11, 16), 2);
-					a = RegistersController.getInstance().getValue(regA, 3);
-					b = RegistersController.getInstance().getValue(regB, 3);
-					ir.setIDEXA(a);
-					ir.setIDEXB(b);
-				} else if (command.equals("L.S") || command.equals("S.S")) {
+				if (command.equals("L.S") || command.equals("S.S")) {
 					a = RegistersController.getInstance().getValue(regA, 1);
 					b = RegistersController.getInstance().getValue(regB, 3);
 					ir.setIDEXA(StringUtils.leftPad(a, 16, "0"));
 					ir.setIDEXB(b);
-				} else if (command.equals("DSLL")) {
-					regA = Integer.parseInt(binary.substring(11, 16), 2);
-					regB = Integer.parseInt(binary.substring(16, 21), 2);
-					a = RegistersController.getInstance().getValue(regA, 1);
-					b = RegistersController.getInstance().getValue(regB, 1);
-					ir.setIDEXA(StringUtils.leftPad(a, 16, "0"));
-					ir.setIDEXB(StringUtils.leftPad(b, 16, "0"));
 				} else {
 					a = RegistersController.getInstance().getValue(regA, 1);
 					b = RegistersController.getInstance().getValue(regB, 1);
@@ -91,7 +73,5 @@ public class IDService extends PipelineFunction {
 
 		}
 	}
-
-	
 
 }

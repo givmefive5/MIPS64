@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.StringUtils;
+
 import Model.Error;
 import Model.Instruction;
 import exceptions.InvalidFormatException;
@@ -195,9 +197,14 @@ public class MIPS64Parser {
 			} else if (command.equals("DSLL")) {
 				rd = registers[0];
 				rs = registers[1];
-				if (registers[2].startsWith("#"))
-					shift = registers[2].substring(1);
-				else
+				if (registers[2].startsWith("#")) {
+					String temp = registers[2].substring(1);
+					int b = Integer.parseInt(temp, 16);
+					if (b > 31)
+						b = 31;
+					shift = StringUtils.leftPad(Integer.toHexString(b), 5, "0");
+
+				} else
 					throw new InvalidImmediateException(shift, line, lineNumber);
 				areCorrectRegisterType('r', rd, rs, null);
 			} else if (command.equals("DADDIU") || command.equals("ANDI")) {

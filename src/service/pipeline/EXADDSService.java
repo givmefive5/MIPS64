@@ -1,10 +1,14 @@
 package service.pipeline;
 
+import java.math.BigInteger;
 import java.util.NoSuchElementException;
+
+import org.apache.commons.lang3.StringUtils;
 
 import Model.Instruction;
 import Model.InternalRegister;
 import controller.PipelineMapController;
+import controller.RegistersController;
 import service.RevisedPipelineService;
 
 public class EXADDSService extends PipelineFunction {
@@ -21,8 +25,15 @@ public class EXADDSService extends PipelineFunction {
 
 				String cond = "0";
 				String aluOutput;
-				Float a = Float.parseFloat(ir.getIDEXA());
-				Float b = Float.parseFloat(ir.getIDEXB());
+
+				BigInteger integer = new BigInteger(ins.getHexOpcode(), 16);
+				String binary = StringUtils.leftPad(integer.toString(2), 32, "0");
+				int regA = Integer.parseInt(binary.substring(16, 21), 2);
+				int regB = Integer.parseInt(binary.substring(11, 16), 2);
+				String aVal = RegistersController.getInstance().getValue(regA, 3);
+				String bVal = RegistersController.getInstance().getValue(regB, 3);
+				Float a = Float.parseFloat(aVal);
+				Float b = Float.parseFloat(bVal);
 				aluOutput = Float.toString(a + b);
 
 				ir.setEXMEMALUOutputADDS(aluOutput);

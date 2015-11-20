@@ -35,7 +35,7 @@ public class MEMService extends PipelineFunction {
 					ir.setMEMWBALUOutput(ir.getEXMEMALUOutput());
 					if (command.equals("LW") || command.equals("LWU")) {
 						String memHex = MemoryController.getHexWordFromMemory(ir.getEXMEMALUOutput());
-						String memValBin = BinaryHexConverter.convertHexToBinary(memHex);
+						String memValBin = BinaryHexConverter.convertHexToBinary(memHex, 32);
 						String padChar = "0";
 						if (command.equals("LW"))
 							padChar = memValBin.substring(0, 1);

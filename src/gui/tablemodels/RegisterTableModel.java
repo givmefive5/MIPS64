@@ -29,9 +29,9 @@ public class RegisterTableModel extends AbstractTableModel {
 			registers[i][3] = new Register("0.0");
 		}
 		registers[32][0] = new Register("LO");
-		registers[32][1] = new Register("00000000");
+		registers[32][1] = new Register("0000000000000000");
 		registers[32][2] = new Register("HI");
-		registers[32][3] = new Register("00000000");
+		registers[32][3] = new Register("0000000000000000");
 
 	}
 

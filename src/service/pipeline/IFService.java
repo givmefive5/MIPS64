@@ -43,7 +43,7 @@ public class IFService extends PipelineFunction {
 					String opcode = ir.getIFIDIR();
 					String binary = null;
 					if (opcode != null) {
-						binary = BinaryHexConverter.convertHexToBinary(opcode);
+						binary = BinaryHexConverter.convertHexToBinary(opcode, 32);
 					}
 					if (binary != null && binary.substring(0, 6).equals("000100")
 							&& isEqualRegisters(binary.substring(6, 11), binary.substring(11, 16))) { // BEQ

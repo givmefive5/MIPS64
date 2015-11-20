@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import Model.Instruction;
 import Model.InternalRegister;
 import controller.PipelineMapController;
+import controller.RegistersController;
+import service.BinaryHexConverter;
 import service.RevisedPipelineService;
 
 public class EXRegService extends PipelineFunction {
@@ -33,15 +35,6 @@ public class EXRegService extends PipelineFunction {
 					BigInteger a = new BigInteger(ir.getIDEXA(), 16);
 					aluOutput = a.add(imm).toString(16).toUpperCase();
 					aluOutput = StringUtils.leftPad(aluOutput, 16, "0");
-				} else if (command.equals("MUL.S") || command.equals("ADD.S")) {
-					Float a = Float.parseFloat(ir.getIDEXA());
-					Float b = Float.parseFloat(ir.getIDEXB());
-					if (command.equals("MUL.S")) // MAY BE CHANGED requires 6 EX
-													// cycles TODO
-						aluOutput = Float.toString(a * b);
-					else if (command.equals("ADD.S")) // TODO requires 4 EX
-														// cycles
-						aluOutput = Float.toString(a + b);
 				} else if (command.equals("DADDU") || command.equals("DMULT") || command.equals("OR")
 						|| command.equals("SLT")) {
 					BigInteger a = new BigInteger(ir.getIDEXA(), 16);
@@ -61,10 +54,17 @@ public class EXRegService extends PipelineFunction {
 					aluOutput = StringUtils.leftPad(aluOutput, 16, "0");
 				} else if (command.equals("DSLL") || command.equals("ANDI") || command.equals("DADDIU")) {
 					if (command.equals("DSLL")) {
-						int a = (int) Long.parseLong(ir.getIDEXA(), 16);
-						int immediate = Integer.parseInt(ir.getIDEXIMM(), 16);
-						int shifted = a << immediate;
-						aluOutput = Integer.toHexString(shifted);
+						BigInteger integer = new BigInteger(ins.getHexOpcode(), 16);
+						String binary = StringUtils.leftPad(integer.toString(2), 32, "0");
+						int shf = Integer.parseInt(binary.substring(21, 26), 2);
+						int regA = Integer.parseInt(binary.substring(11, 16), 2);
+						String aVal = RegistersController.getInstance().getValue(regA, 1);
+						String aBin = BinaryHexConverter.convertHexToBinary(aVal, 64);
+
+						String shifted = aBin.substring(shf);
+						String padRight = StringUtils.leftPad("", shf, "0");
+						shifted += padRight;
+						aluOutput = BinaryHexConverter.convertBinaryToHex(shifted, 16);
 					} else if (command.equals("ANDI")) {
 						BigInteger a = new BigInteger(ir.getIDEXA(), 16);
 						aluOutput = a.or(imm).toString(16).toUpperCase();
