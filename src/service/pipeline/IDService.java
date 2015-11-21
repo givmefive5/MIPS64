@@ -54,6 +54,20 @@ public class IDService extends PipelineFunction {
 					b = RegistersController.getInstance().getValue(regB, 3);
 					ir.setIDEXA(StringUtils.leftPad(a, 16, "0"));
 					ir.setIDEXB(b);
+				} else if (command.equals("ADD.S") || command.equals("MUL.S")) {
+					regA = Integer.parseInt(binary.substring(11, 16), 2);
+					regB = Integer.parseInt(binary.substring(16, 21), 2);
+					a = RegistersController.getInstance().getValue(regA, 3);
+					b = RegistersController.getInstance().getValue(regB, 3);
+					ir.setIDEXA(StringUtils.leftPad(a, 16, "0"));
+					ir.setIDEXB(StringUtils.leftPad(b, 16, "0"));
+				} else if (command.equals("DSLL")) {
+					regA = Integer.parseInt(binary.substring(11, 16), 2);
+					regB = Integer.parseInt(binary.substring(16, 21), 2);
+					a = RegistersController.getInstance().getValue(regA, 1);
+					b = RegistersController.getInstance().getValue(regB, 1);
+					ir.setIDEXA(StringUtils.leftPad(a, 16, "0"));
+					ir.setIDEXB(StringUtils.leftPad(b, 16, "0"));
 				} else {
 					a = RegistersController.getInstance().getValue(regA, 1);
 					b = RegistersController.getInstance().getValue(regB, 1);
