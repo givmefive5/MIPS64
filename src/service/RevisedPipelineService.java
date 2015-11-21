@@ -39,6 +39,14 @@ public class RevisedPipelineService {
 
 	public void setInstructions(List<Instruction> instructions) {
 		this.instructions = instructions;
+
+		Instruction lastInstruction = instructions.get(instructions.size() - 1);
+		if (lastInstruction.getCommand().equals("BEQ") || lastInstruction.getCommand().equals("J")) {
+			Instruction nop = new Instruction(instructions.size(), "DADDU r0, r0, r0", "DADDU", "r0", "r0", "r0", null,
+					null, null, null, null);
+			instructions.add(nop);
+		}
+
 		ifService.addInstructionToQueue(instructions.get(0));
 	}
 
@@ -56,11 +64,11 @@ public class RevisedPipelineService {
 
 	public void fullExecutionRun() {
 		boolean isFinished = false;
-		while(!isFinished){
+		while (!isFinished) {
 			singleCycleRun();
-			if(ifService.peek() == null && idService.peek() == null && exRegService.peek() == null
-					&& exMulsService.peek() == null && exAddsService.peek() == null 
-					&& memService.peek() == null && wbService.peek() == null)
+			if (ifService.peek() == null && idService.peek() == null && exRegService.peek() == null
+					&& exMulsService.peek() == null && exAddsService.peek() == null && memService.peek() == null
+					&& wbService.peek() == null)
 				isFinished = true;
 		}
 		// TODO Auto-generated method stub

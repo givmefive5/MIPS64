@@ -1,0 +1,2 @@
+L1: DADDU r1, r2, r3
+BEQ r0, r0, L1

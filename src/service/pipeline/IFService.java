@@ -53,7 +53,10 @@ public class IFService extends PipelineFunction {
 						} else {
 							npc = 0;
 						}
-						int imm = Integer.parseInt(binary.substring(16), 2) * 4;
+
+						String immediate = StringUtils.leftPad(binary.substring(16), 32, binary.substring(16, 17));
+						long l = Long.parseLong(immediate, 2);
+						int imm = (int) l * 4;
 						String hex = StringUtils.leftPad(Integer.toHexString(npc + imm), 16, "0").toUpperCase();
 						ir.setIFIDNPC(hex);
 						ir.setPC(hex);
