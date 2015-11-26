@@ -68,7 +68,7 @@ public class RegisterTableModel extends AbstractTableModel {
 		if (row == 0)
 			JOptionPane.showMessageDialog(MainFrame.getInstance(), "Registers R0 and F0 can not be edited.");
 		else if (row == 32) {
-			val = StringUtils.leftPad(val, 8, "0");
+			val = StringUtils.leftPad(val, 16, "0");
 			try {
 				new BigInteger(val, 16);
 				registers[row][col].setValue(val);

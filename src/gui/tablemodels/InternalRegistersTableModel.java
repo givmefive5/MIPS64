@@ -38,8 +38,6 @@ public class InternalRegistersTableModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		if (col == 1)
-			return true;
 		return false;
 	}
 

@@ -67,7 +67,7 @@ public class EXRegService extends PipelineFunction {
 						aluOutput = BinaryHexConverter.convertBinaryToHex(shifted, 16);
 					} else if (command.equals("ANDI")) {
 						BigInteger a = new BigInteger(ir.getIDEXA(), 16);
-						aluOutput = a.or(imm).toString(16).toUpperCase();
+						aluOutput = a.and(imm).toString(16).toUpperCase();
 					} else if (command.equals("DADDIU")) {
 						BigInteger a = new BigInteger(ir.getIDEXA(), 16);
 						aluOutput = a.add(imm).toString(16).toUpperCase();
