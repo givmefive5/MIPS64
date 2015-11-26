@@ -75,6 +75,9 @@ public class EXRegService extends PipelineFunction {
 					aluOutput = StringUtils.leftPad(aluOutput, 16, "0");
 				}
 
+				if (command.equals("J"))
+					cond = "1";
+
 				ir.setEXMEMALUOutput(aluOutput);
 				ir.setEXMEMCond(cond);
 				ir.setEXMEMIR(ir.getIDEXIR());
