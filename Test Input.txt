@@ -1,0 +1,11 @@
+DADDU r5, r1, r2
+DMULT r5, r5, r1
+SLT r6, r2, r1
+OR r1, r5, r2
+BEQ r1, r2, label
+
+label: 
+	LW r3, 0(r0)
+	LW r4, 0(r0)
+	SW r5, 0(r0)
+	
