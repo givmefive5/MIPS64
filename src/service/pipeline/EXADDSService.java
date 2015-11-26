@@ -39,6 +39,7 @@ public class EXADDSService extends PipelineFunction {
 				ir.setEXMEMALUOutputADDS(aluOutput);
 				ir.setEXMEMCondADDS(cond);
 				ir.setEXMEMIRADDS(ir.getIDEXIR());
+				System.out.println(ir.getIDEXB());
 				ir.setEXMEMBADDS(ir.getIDEXB());
 
 				PipelineMapController.setMapValue("EXADDS", ins.getLineNumber(), cycleNumber);

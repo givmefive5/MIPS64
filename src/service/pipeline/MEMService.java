@@ -45,6 +45,7 @@ public class MEMService extends PipelineFunction {
 					} else if (command.equals("L.S")) {
 						String memoryValueHex = MemoryController.getHexWordFromMemory(ir.getEXMEMALUOutput());
 						Float floatNum = FloatingPointConverter.convertHexToFloat(memoryValueHex);
+						System.out.println(memoryValueHex);
 						ir.setMEMWBLMD(floatNum.toString());
 					} else if (command.equals("SW")) {
 						String word = ir.getEXMEMB().substring(8, 16);

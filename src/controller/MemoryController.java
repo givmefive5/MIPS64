@@ -50,6 +50,7 @@ public class MemoryController {
 	public static String getHexWordFromMemory(String baseAddress) {
 		Integer address = Integer.parseInt(baseAddress, 16);
 		Double rowIndex = address * 1.0 / 8 - 1024;
+		System.out.println(address + " " + rowIndex);
 		if (rowIndex < 0 || rowIndex % 1 != 0) {
 			JOptionPane.showMessageDialog(MainFrame.getInstance(),
 					"Address " + baseAddress + " is not a valid memory location");
